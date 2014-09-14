@@ -15,7 +15,7 @@ add(new HTML5DropablePanel("dropable") {
 
 	    private static final long serialVersionUID = 5131615920147559576L;
 
-	    {@literal @}Override
+	    @Override
 	    public void handleResponse(AjaxRequestTarget target,
 		    String fileName, ServletInputStream fileServletInputStream, String dropid, String id) {
 		    // Handle the file
