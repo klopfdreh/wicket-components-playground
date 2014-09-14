@@ -17,7 +17,7 @@ add(new HTML5DropablePanel("dropable") {
 
 	    {@literal @}Override
 	    public void handleResponse(AjaxRequestTarget target,
-		    String fileName, ServletInputStream fileServletInputStream) {
+		    String fileName, ServletInputStream fileServletInputStream, String dropid, String id) {
 		    // Handle the file
 	    }
 });
