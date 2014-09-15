@@ -138,12 +138,15 @@ public abstract class HTML5FilesDropablePanel extends WebMarkupContainer {
 	@Override
 	protected void respond(AjaxRequestTarget target) {
 	    InputStream inputStream = null;
+	    String fileName = "";
+	    String fileid = "";
+	    String dropid = "";
 	    try {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) RequestCycle
 			.get().getRequest().getContainerRequest();
-		String fileName = httpServletRequest.getParameter("fileName");
-		String fileid = httpServletRequest.getParameter("fileid");
-		String dropid = httpServletRequest.getParameter("dropid");
+		fileName = httpServletRequest.getParameter("fileName");
+		fileid = httpServletRequest.getParameter("fileid");
+		dropid = httpServletRequest.getParameter("dropid");
 		String data = getRequestCycle().getRequest()
 			.getPostParameters().getParameterValue("data")
 			.toString();
@@ -154,9 +157,11 @@ public abstract class HTML5FilesDropablePanel extends WebMarkupContainer {
 			    URLDecoder.decode(fileName, "UTF-8"), inputStream,
 			    dropid, fileid);
 		} else {
+		    handleFailure(target, fileName, dropid, fileid);
 		    LOGGER.warn("The data could'nt be processed - it may be that the max post size is to low! Example for tomcat: maxPostSize in Connector settings.");
 		}
 	    } catch (IOException e) {
+		handleFailure(target, fileName, dropid, fileid);
 		LOGGER.error("Error while receiving a droped file", e);
 	    } finally {
 		IOUtils.closeQuietly(inputStream);
@@ -172,7 +177,7 @@ public abstract class HTML5FilesDropablePanel extends WebMarkupContainer {
      *            the target to give feedback to the user.
      * @param fileName
      *            the name of the file which has been received
-     * @param fileServletInputStream
+     * @param inputStream
      *            the file which has been received
      * @param dropid
      *            a random id which is the same for a set of files which have
@@ -181,8 +186,26 @@ public abstract class HTML5FilesDropablePanel extends WebMarkupContainer {
      *            a random file id
      */
     protected abstract void handleResponse(AjaxRequestTarget target,
-	    String fileName, InputStream fileServletInputStream, String dropid,
+	    String fileName, InputStream inputStream, String dropid,
 	    String fileid);
+
+    /**
+     * If the file size was to big or the content could'nt be decoded
+     * 
+     * @param target
+     *            the target to give feedback to the user.
+     * @param fileName
+     *            the name of the file which has been received
+     * @param dropid
+     *            a random id which is the same for a set of files which have
+     *            been dropped into the panel's area
+     * @param fileid
+     *            a random file id
+     */
+    protected void handleFailure(AjaxRequestTarget target, String fileName,
+	    String dropid, String fileid) {
+	// To be overridden
+    }
 
     /**
      * Overwrite this function to inject additional client code into the loop

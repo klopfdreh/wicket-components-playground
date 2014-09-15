@@ -17,7 +17,7 @@ add(new HTML5FilesDropablePanel("dropable") {
 
 	    @Override
 	    public void handleResponse(AjaxRequestTarget target,
-		    String fileName, ServletInputStream fileServletInputStream,
+		    String fileName, InputStream inputStream,
                     String dropid, String id) {
 		    // Handle the file
 	    }
@@ -33,7 +33,13 @@ add(new HTML5FilesDropablePanel("dropable") {
 	    @Override
 	    protected String getFinishedUploadClientScript() {
  		return "alert('finished'+file.dropid); alert('finished'+file.fileid);";
-	    }	    
+	    }
+	    
+	    @Override
+    	protected void handleFailure(AjaxRequestTarget target, String fileName,
+	    	String dropid, String fileid) {
+	    	// Handle error
+	    }
 });
 ```
 
