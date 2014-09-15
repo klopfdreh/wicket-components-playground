@@ -26,15 +26,28 @@ import org.slf4j.LoggerFactory;
  * <br>
  * 
  * Example Implementation: <code><pre>
- * 	add(new HTML5DropablePanel("dropable") {
+ * 	add(new HTML5FilesDropablePanel("dropable") {
  * 
  * 	    private static final long serialVersionUID = 5131615920147559576L;
  * 
  * 	    {@literal @}Override
  * 	    public void handleResponse(AjaxRequestTarget target,
- * 		    String fileName, ServletInputStream fileServletInputStream) {
+ * 		    String fileName, ServletInputStream fileServletInputStream, 
+ * 		    String dropid, String id) {
  * 		// Handle the file
  * 	    }
+ * 
+ * 	    // The following methods are not required to be overridden - see the java doc which javascript variables are available
+ * 
+ * 	    {@literal @}Override
+ *	    protected String getStartUploadClientScript() {
+ *		return "alert('start'+file.dropid); alert('start'+file.fileid);"; 
+ *	    };
+ * 
+ *	    {@literal @}Override
+ *	    protected String getFinishedUploadClientScript() {
+ * 		return "alert('finished'+file.dropid); alert('finished'+file.fileid);";
+ *	    }
  * 	});
  * </pre></code>HTML: <code><pre>
  * &lt;div wicket:id="dropable" style="width:100px;height:100px;border:1px solid black;"&gt;&lt;/div&gt;
@@ -45,23 +58,23 @@ import org.slf4j.LoggerFactory;
  * 
  * @author tobiassoloschenko
  */
-public abstract class HTML5DropablePanel extends WebMarkupContainer {
+public abstract class HTML5FilesDropablePanel extends WebMarkupContainer {
 
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LoggerFactory
-	    .getLogger(HTML5DropablePanel.class);
+	    .getLogger(HTML5FilesDropablePanel.class);
 
-    private HTML5DropableAjaxEventBehavior html5DropableAjaxEventBehavior;
+    private HTML5FilesDropableAjaxEventBehavior html5FilesDropableAjaxEventBehavior;
 
-    public HTML5DropablePanel(String id) {
+    public HTML5FilesDropablePanel(String id) {
 	super(id);
-	add(html5DropableAjaxEventBehavior = new HTML5DropableAjaxEventBehavior());
+	add(html5FilesDropableAjaxEventBehavior = new HTML5FilesDropableAjaxEventBehavior());
     }
 
-    public HTML5DropablePanel(String id, IModel<?> model) {
+    public HTML5FilesDropablePanel(String id, IModel<?> model) {
 	super(id, model);
-	add(html5DropableAjaxEventBehavior = new HTML5DropableAjaxEventBehavior());
+	add(html5FilesDropableAjaxEventBehavior = new HTML5FilesDropableAjaxEventBehavior());
     }
 
     /**
@@ -73,12 +86,12 @@ public abstract class HTML5DropablePanel extends WebMarkupContainer {
 	super.renderHead(response);
 	InputStream eventFunctionScript = null;
 	try {
-	    eventFunctionScript = HTML5DropablePanel.class
-		    .getResourceAsStream(HTML5DropablePanel.class
+	    eventFunctionScript = HTML5FilesDropablePanel.class
+		    .getResourceAsStream(HTML5FilesDropablePanel.class
 			    .getSimpleName() + "EventFunctionScript.js");
 	    String string = IOUtils.toString(eventFunctionScript);
 	    String format = String.format(string, getMarkupId(),
-		    html5DropableAjaxEventBehavior.getCallbackScript());
+		    html5FilesDropableAjaxEventBehavior.getCallbackScript());
 	    response.render(OnDomReadyHeaderItem.forScript(format));
 	} catch (IOException e) {
 	    throw new IllegalStateException(
@@ -92,7 +105,7 @@ public abstract class HTML5DropablePanel extends WebMarkupContainer {
      * Renders the callback script to the event function so that the files are
      * going to be send back to the server if dropped.
      */
-    private class HTML5DropableAjaxEventBehavior extends
+    private class HTML5FilesDropableAjaxEventBehavior extends
 	    AbstractDefaultAjaxBehavior {
 
 	private static final long serialVersionUID = -2575324860936557552L;
@@ -101,12 +114,13 @@ public abstract class HTML5DropablePanel extends WebMarkupContainer {
 	public CharSequence getCallbackScript() {
 	    InputStream callbackScript = null;
 	    try {
-		callbackScript = HTML5DropablePanel.class
-			.getResourceAsStream(HTML5DropablePanel.class
+		callbackScript = HTML5FilesDropablePanel.class
+			.getResourceAsStream(HTML5FilesDropablePanel.class
 				.getSimpleName() + "CallbackScript.js");
 
 		String string = IOUtils.toString(callbackScript);
-		return String.format(string, getCallbackUrl());
+		return String.format(string, getStartUploadClientScript(),
+			getCallbackUrl(), getFinishedUploadClientScript());
 	    } catch (IOException e) {
 		throw new IllegalStateException(
 			"The callback script couldn't be load.", e);
@@ -126,11 +140,11 @@ public abstract class HTML5DropablePanel extends WebMarkupContainer {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) RequestCycle
 			.get().getRequest().getContainerRequest();
 		String fileName = httpServletRequest.getParameter("fileName");
-		String id = httpServletRequest.getParameter("id");
+		String fileid = httpServletRequest.getParameter("fileid");
 		String dropid = httpServletRequest.getParameter("dropid");
 		fileServletInputStream = httpServletRequest.getInputStream();
 		handleResponse(target, URLDecoder.decode(fileName, "UTF-8"),
-			fileServletInputStream, dropid, id);
+			fileServletInputStream, dropid, fileid);
 	    } catch (IOException e) {
 		LOGGER.error("Error while receiving a droped file", e);
 	    } finally {
@@ -152,10 +166,52 @@ public abstract class HTML5DropablePanel extends WebMarkupContainer {
      * @param dropid
      *            a random id which is the same for a set of files which have
      *            been dropped into the panel's area
-     * @param id
-     *            a random id
+     * @param fileid
+     *            a random file id
      */
-    public abstract void handleResponse(AjaxRequestTarget target,
+    protected abstract void handleResponse(AjaxRequestTarget target,
 	    String fileName, ServletInputStream fileServletInputStream,
-	    String dropid, String id);
+	    String dropid, String fileid);
+
+    /**
+     * Overwrite this function to inject additional client code into the loop
+     * for each file. This script will we executed before each file's ajax call.
+     * This method can be used to add some information into the panel for
+     * example, so that the user see's the file started uploading. <br>
+     * <br>
+     * The following variables are accessable in this script:<br>
+     * <br>
+     * <b>file</b> - the file object containing the data / the name of the file
+     * (e.g. file.name)<br>
+     * <b>file.dropid</b> - the drop id the ajax call was made<br>
+     * <b>file.fileid</b> - the id of the file<br>
+     * <b>evt</b> - the drop event
+     * 
+     * 
+     * @return the script to be placed in the file loop
+     */
+    protected String getStartUploadClientScript() {
+	return "";
+    }
+
+    /**
+     * Overwrite this function to inject additional client code into the finish
+     * method of the ajax call. THis method can be used to add some information
+     * into the panel for example, so that the user see's the file finished
+     * uploading.<br>
+     * <br>
+     * The following variables are accessable in this script:<br>
+     * <br>
+     * <b>file</b> - the file object containing the data / the name of the file
+     * (e.g. file.name)<br>
+     * <b>file.dropid</b> - the drop id the ajax call was made<br>
+     * <b>file.fileid</b> - the id of the file<br>
+     * <b>response</b> - the response wicket gives back to the client after the ajax call<br>
+     * <b>evt</b> - the drop event
+     * 
+     * @return the script to be placed in the sucess method of the ajax upload
+     */
+    protected String getFinishedUploadClientScript() {
+	return "";
+    }
 }
