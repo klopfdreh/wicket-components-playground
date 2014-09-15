@@ -33,11 +33,12 @@ import org.slf4j.LoggerFactory;
  * 	    {@literal @}Override
  * 	    public void handleResponse(AjaxRequestTarget target,
  * 		    String fileName, ServletInputStream fileServletInputStream, 
- * 		    String dropid, String id) {
+ * 		    String dropid, String fileid) {
  * 		// Handle the file
  * 	    }
  * 
- * 	    // The following methods are not required to be overridden - see the java doc which javascript variables are available
+ * 	    // The following methods are not required to be overridden - 
+ * 	    // see the java doc which javascript variables are available
  * 
  * 	    {@literal @}Override
  *	    protected String getStartUploadClientScript() {
