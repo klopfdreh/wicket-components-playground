@@ -15,7 +15,7 @@ $.each(evt.originalEvent.dataTransfer.files, function(index) {
 	var reader = new FileReader();
 	reader.onload = (function(file) {
 		return function(e) {
-			Wicket.Ajax.post({'u':'%s&fileName=' + encodeURIComponent(file.name) + '&dropid='+dropid+'&fileid=' + fileid, ep:{data:btoa(reader.result)}, coh:[function(){
+			Wicket.Ajax.post({'u':'%s&fileName=' + encodeURIComponent(file.name) + '&dropid='+file.dropid+'&fileid=' + file.fileid, ep:{data:btoa(reader.result)}, coh:[function(){
 				// getFinishedUploadClientScript
 				%s;
 			}]});
