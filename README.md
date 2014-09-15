@@ -23,7 +23,7 @@ add(new HTML5FilesDropablePanel("dropable") {
 	    }
 	    
  	    // The following methods are not required to be overridden - 
- 	    //see the java doc which javascript variables are available
+ 	    // see the java doc which javascript variables are available
  
  	    @Override
 	    protected String getStartUploadClientScript() {
