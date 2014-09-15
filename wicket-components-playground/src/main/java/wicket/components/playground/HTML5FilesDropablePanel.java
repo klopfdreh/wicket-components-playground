@@ -186,8 +186,8 @@ public abstract class HTML5FilesDropablePanel extends WebMarkupContainer {
      * (e.g. file.name)<br>
      * <b>file.dropid</b> - the drop id the ajax call was made<br>
      * <b>file.fileid</b> - the id of the file<br>
-     * <b>evt</b> - the drop event
-     * 
+     * <b>evt</b> - the drop event<br><br>
+     * <b>!!! Important - this script can also be used to prevent the ajax call to be processed by inserting a return;</b>
      * 
      * @return the script to be placed in the file loop
      */
