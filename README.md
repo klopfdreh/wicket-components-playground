@@ -27,12 +27,12 @@ add(new HTML5FilesDropablePanel("dropable") {
  
  	    @Override
 	    protected String getStartUploadClientScript() {
-		return "alert('start'+file.dropid); alert('start'+file.fileid);"; 
+			return "alert('start'+file.dropid); alert('start'+file.fileid);"; 
 	    };
  
 	    @Override
 	    protected String getFinishedUploadClientScript() {
- 		return "alert('finished'+file.dropid); alert('finished'+file.fileid);";
+ 			return "alert('finished'+file.dropid); alert('finished'+file.fileid);";
 	    }
 	    
 	    @Override
