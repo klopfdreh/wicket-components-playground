@@ -1,10 +1,10 @@
 package wicket.components.playground;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
 
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.IOUtils;
@@ -15,6 +15,7 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.util.crypt.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,14 +42,14 @@ import org.slf4j.LoggerFactory;
  * 	    // see the java doc which javascript variables are available
  * 
  * 	    {@literal @}Override
- *	    protected String getStartUploadClientScript() {
- *		return "alert('start'+file.dropid); alert('start'+file.fileid);"; 
- *	    };
+ * 	    protected String getStartUploadClientScript() {
+ * 		return "alert('start'+file.dropid); alert('start'+file.fileid);"; 
+ * 	    };
  * 
- *	    {@literal @}Override
- *	    protected String getFinishedUploadClientScript() {
+ * 	    {@literal @}Override
+ * 	    protected String getFinishedUploadClientScript() {
  * 		return "alert('finished'+file.dropid); alert('finished'+file.fileid);";
- *	    }
+ * 	    }
  * 	});
  * </pre></code>HTML: <code><pre>
  * &lt;div wicket:id="dropable" style="width:100px;height:100px;border:1px solid black;"&gt;&lt;/div&gt;
@@ -136,20 +137,29 @@ public abstract class HTML5FilesDropablePanel extends WebMarkupContainer {
 	 */
 	@Override
 	protected void respond(AjaxRequestTarget target) {
-	    ServletInputStream fileServletInputStream = null;
+	    InputStream inputStream = null;
 	    try {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) RequestCycle
 			.get().getRequest().getContainerRequest();
 		String fileName = httpServletRequest.getParameter("fileName");
 		String fileid = httpServletRequest.getParameter("fileid");
 		String dropid = httpServletRequest.getParameter("dropid");
-		fileServletInputStream = httpServletRequest.getInputStream();
-		handleResponse(target, URLDecoder.decode(fileName, "UTF-8"),
-			fileServletInputStream, dropid, fileid);
+		String data = getRequestCycle().getRequest()
+			.getPostParameters().getParameterValue("data")
+			.toString();
+		if (data != null) {
+		    inputStream = new ByteArrayInputStream(
+			    Base64.decodeBase64(data.getBytes()));
+		    handleResponse(target,
+			    URLDecoder.decode(fileName, "UTF-8"), inputStream,
+			    dropid, fileid);
+		} else {
+		    LOGGER.warn("The data could'nt be processed - it may be that the max post size is to low! Example for tomcat: maxPostSize in Connector settings.");
+		}
 	    } catch (IOException e) {
 		LOGGER.error("Error while receiving a droped file", e);
 	    } finally {
-		IOUtils.closeQuietly(fileServletInputStream);
+		IOUtils.closeQuietly(inputStream);
 	    }
 	}
     }
@@ -171,8 +181,8 @@ public abstract class HTML5FilesDropablePanel extends WebMarkupContainer {
      *            a random file id
      */
     protected abstract void handleResponse(AjaxRequestTarget target,
-	    String fileName, ServletInputStream fileServletInputStream,
-	    String dropid, String fileid);
+	    String fileName, InputStream fileServletInputStream, String dropid,
+	    String fileid);
 
     /**
      * Overwrite this function to inject additional client code into the loop
@@ -186,8 +196,10 @@ public abstract class HTML5FilesDropablePanel extends WebMarkupContainer {
      * (e.g. file.name)<br>
      * <b>file.dropid</b> - the drop id the ajax call was made<br>
      * <b>file.fileid</b> - the id of the file<br>
-     * <b>evt</b> - the drop event<br><br>
-     * <b>!!! Important - this script can also be used to prevent the ajax call to be processed by inserting a return;</b>
+     * <b>evt</b> - the drop event<br>
+     * <br>
+     * <b>!!! Important - this script can also be used to prevent the ajax call
+     * to be processed by inserting a return;</b>
      * 
      * @return the script to be placed in the file loop
      */
@@ -207,7 +219,6 @@ public abstract class HTML5FilesDropablePanel extends WebMarkupContainer {
      * (e.g. file.name)<br>
      * <b>file.dropid</b> - the drop id the ajax call was made<br>
      * <b>file.fileid</b> - the id of the file<br>
-     * <b>response</b> - the response wicket gives back to the client after the ajax call<br>
      * <b>evt</b> - the drop event
      * 
      * @return the script to be placed in the sucess method of the ajax upload

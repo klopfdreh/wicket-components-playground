@@ -12,17 +12,14 @@ $.each(evt.originalEvent.dataTransfer.files, function(index) {
 	// getStartUploadClientScript
 	%s;
 	
-	$.ajax({
-		type : 'POST',
-		url : '%s&fileName=' + encodeURIComponent(file.name) + '&dropid='+dropid+'&fileid=' + fileid,
-		data : file,
-		contentType : false,
-		processData : false,
-		
-		success:function(response){
-			var file = this.data
-			// getFinishedUploadClientScript
-			%s;
+	var reader = new FileReader();
+	reader.onload = (function(file) {
+		return function(e) {
+			Wicket.Ajax.post({'u':'%s&fileName=' + encodeURIComponent(file.name) + '&dropid='+dropid+'&fileid=' + fileid, ep:{data:btoa(reader.result)}, coh:[function(){
+				// getFinishedUploadClientScript
+				%s;
+			}]});
 		}
-	});
+	})(file);
+	reader.readAsBinaryString(file);
 });
