@@ -42,7 +42,7 @@ import org.apache.wicket.request.resource.ResourceReference;
  * @see NonCachingImage
  * 
  * @author Jonathan Locke
- * @author Tobias Soloschenko
+ * @author Tobias Soloschenko 
  * 
  */
 public class Image extends WebComponent implements IResourceListener {
@@ -294,11 +294,17 @@ public class Image extends WebComponent implements IResourceListener {
 	protected void onComponentTag(final ComponentTag tag) {
 		this.checkComponentTag(tag, "img");
 		super.onComponentTag(tag);
-		if (this.localizedImageResources.size() == 1) {
+		if(tag.getAttribute("source") != null){		    
+		    this.buildSrcAndSrcSetTag(tag, false);
+		}else{
+		    if(localizedImageResources.size()==1){			
 			this.buildSingleSrcTag(tag);
-		} else {
+			
+		    }else{
 			this.buildSrcAndSrcSetTag(tag, true);
+		    }
 		}
+		tag.remove("single");
 	}
 
 	/**
