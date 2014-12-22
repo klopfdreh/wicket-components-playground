@@ -55,37 +55,78 @@ If the user uploads several files a request is made for every file to the handle
 TODO: Prevent multiple drops at the same time to one HTML5DropablePanel
 
 
-HTML5ResponsivePicture
+Refactoring of Wicket's image for HTML5 responsive image
 ------------------
 
-The responsive picture is used to provide images based on the resolution of the current device / the viewport which is available. The last parameter of the Source is the min width used in the media attribute of the source tag.
+The responsive picture is used to provide images based on the resolution of the current device / the viewport which is available. 
 
-Example Implementation
+Example Implementation for picture tag:
 Java:
 ```java
-   HTML5ResponivePicture html5ResponiveImagePicture = new HTML5ResponivePicture("myResponsiveImage");
-   html5ResponiveImagePicture.addFallbackImage(new Image("fallback", 
-   new PackageResourceReference(TestPage.class, "fallback.jpg")));
-   
-   html5ResponiveImagePicture.addSource(new Source("large.jpg", 
-   new PackageResourceReference(TestPage.class, "large.jpg"),"56.25em"));
-   
-   html5ResponiveImagePicture.addSource(new Source("medium.jpg", 
-   new PackageResourceReference(TestPage.class, "medium.jpg"),"37.5em"));
-   
-   html5ResponiveImagePicture.addSource(new Source("small.jpg", 
-   new PackageResourceReference(TestPage.class, "small.jpg"),null));
-   
-   add(html5ResponiveImagePicture);
+	Picture picture = new Picture("picture");
+	
+	Source large = new Source("sourcelarge", new PackageResourceReference(this.getClass(), "large.jpg"));
+	large.setMedia("(min-width: 650px)");
+	picture.addSource(large);
+	large.setOutputMarkupId(true);
+	
+	Source medium = new Source("sourcemedium", new PackageResourceReference(this.getClass(), "medium.jpg"));
+	medium.setMedia("(min-width: 465px)");
+	picture.addSource(medium);
+	
+	Image image3 = new Image("image3", new PackageResourceReference(this.getClass(), "small.jpg"));
+	picture.addImage(image3);
+	
+	this.add(picture);
 ```
 
 HTML:
 <pre>
-  &lt;picture wicket:id="myResponsiveImage"&gt;
-     &lt;source wicket:id="sources" /&gt;
-     &lt;img wicket:id="fallback" /&gt;
+  &lt;picture wicket:id="picture"&gt;
+     &lt;source wicket:id="sourcelarge" /&gt;
+     &lt;source wicket:id="sourcemedium" /&gt;
+     &lt;img wicket:id="image3" /&gt;
   &lt;/picture>
 </pre>
+
+
+Example Implementation of img tag with srcset and xvalues:
+Java:
+```java
+	Image image2 = new Image("image2", 
+	new PackageResourceReference(this.getClass(), "small.jpg"), 
+	new PackageResourceReference(this.getClass(),"small.jpg"), 
+	new PackageResourceReference(this.getClass(), "medium.jpg"), 
+	new PackageResourceReference(this.getClass(), "large.jpg"));
+	image2.setXValues("320w", "600w", "900w");
+	this.add(image2);
+```
+
+HTML:
+<pre>
+	&lt;img wicket:id="image2"/&gt;
+</pre>
+
+Example implementation of img tag with overridden getImgaeResourceReference method:
+Java:
+```java
+	Image image1 = new Image("image1", Model.of("Test")) {
+		private static final long serialVersionUID = 1L;
+	
+		@Override
+		protected ResourceReference getImageResourceReference() {
+			return new PackageResourceReference(this.getClass(), "small.jpg");
+		}
+	};
+	this.add(image1);
+```
+
+HTML:
+<pre>
+	&lt;img wicket:id="image1"/&gt;
+</pre>
+
+The following methods are new to the Wicket's image: setXValues(String... xvalues), setSizes(String... sizes) and the Source's media attribute can be set with setMedia(String media)
 
 <b>Important: In FireFox 33 you have to enable it via flags - about:config &gt; dom.image.picture.enabled;true and dom.image.srcset.enabled;true</b>
 
