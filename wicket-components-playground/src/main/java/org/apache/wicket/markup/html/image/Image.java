@@ -292,11 +292,11 @@ public class Image extends WebComponent implements IResourceListener {
 	 */
 	@Override
 	protected void onComponentTag(final ComponentTag tag) {
-		this.checkComponentTag(tag, "img");
 		super.onComponentTag(tag);
-		if(tag.getAttribute("source") != null){		    
+		if(tag.getName().equals("source")){	
 		    this.buildSrcAndSrcSetTag(tag, false);
 		}else{
+		    this.checkComponentTag(tag, "img");
 		    if(localizedImageResources.size()==1){			
 			this.buildSingleSrcTag(tag);
 			

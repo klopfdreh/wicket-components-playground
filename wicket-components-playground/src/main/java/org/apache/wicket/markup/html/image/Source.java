@@ -68,10 +68,7 @@ public class Source extends Image {
 
     @Override
     protected void onComponentTag(ComponentTag tag) {
-	tag.setName("img");
-	tag.put("source", true);
 	super.onComponentTag(tag);
-	tag.remove("source");
 	tag.setName("source");
 	if (this.media != null) {
 	    tag.put("media", this.media);
