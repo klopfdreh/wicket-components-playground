@@ -61,6 +61,7 @@ Refactoring of Wicket's image for HTML5 responsive image
 The responsive picture is used to provide images based on the resolution of the current device / the viewport which is available. 
 
 Example Implementation for picture tag:
+
 Java:
 ```java
 	Picture picture = new Picture("picture");
@@ -91,6 +92,7 @@ HTML:
 
 
 Example Implementation of img tag with srcset and xvalues:
+
 Java:
 ```java
 	Image image2 = new Image("image2", 
@@ -108,6 +110,7 @@ HTML:
 </pre>
 
 Example implementation of img tag with overridden getImgaeResourceReference method:
+
 Java:
 ```java
 	Image image1 = new Image("image1", Model.of("Test")) {
@@ -126,7 +129,9 @@ HTML:
 	&lt;img wicket:id="image1"/&gt;
 </pre>
 
-The following methods are new to the Wicket's image: setXValues(String... xvalues), setSizes(String... sizes) and the Source's media attribute can be set with setMedia(String media)
+The following methods are new to the Wicket's image: setXValues(String... xvalues), setSizes(String... sizes) and the Source's media attribute can be set with setMedia(String media).
+
+The x values are applied to the srcset element the way the values are given to the setXValues method.
 
 <b>Important: In FireFox 33 you have to enable it via flags - about:config &gt; dom.image.picture.enabled;true and dom.image.srcset.enabled;true</b>
 
