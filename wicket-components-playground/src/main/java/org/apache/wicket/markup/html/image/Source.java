@@ -2,7 +2,6 @@ package org.apache.wicket.markup.html.image;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
@@ -13,7 +12,7 @@ import org.apache.wicket.request.resource.ResourceReference;
  * The source tag is the same as the image element, but it is also possible to
  * set the media attribute with setMedia(String media). The second difference is
  * that there is no src attribute, so every ResourceReference and ImageResource
- * is added directly to the srcset attribute. 
+ * is added directly to the srcset attribute.
  * 
  * @see org.apache.wicket.markup.html.image.Image
  * @author Tobias Soloschenko
@@ -35,26 +34,22 @@ public class Source extends Image {
     /**
      * @see org.apache.wicket.markup.html.image.Image
      */
-    public Source(final String id,
-	    final ResourceReference... resourceReferences) {
-	this(id, null, resourceReferences);
+    public Source(final String id, final ResourceReference... resourceReferences) {
+	super(id, null, resourceReferences);
     }
 
     /**
      * @see org.apache.wicket.markup.html.image.Image
      */
-    public Source(final String id, PageParameters resourceParameters,
-	    final ResourceReference... resourceReferences) {
-	super(id);
-	this.setImageResourceReferences(resourceParameters, resourceReferences);
+    public Source(final String id, PageParameters resourceParameters, final ResourceReference... resourceReferences) {
+	super(id, null, resourceParameters, resourceReferences);
     }
 
     /**
      * @see org.apache.wicket.markup.html.image.Image
      */
     public Source(final String id, final IResource... imageResources) {
-	super(id);
-	this.setImageResources(imageResources);
+	super(id, null, imageResources);
     }
 
     /**
@@ -68,7 +63,7 @@ public class Source extends Image {
      * @see org.apache.wicket.markup.html.image.Image
      */
     public Source(final String id, final String string) {
-	this(id, new Model<String>(string));
+	super(id, string);
     }
 
     @Override
@@ -77,15 +72,26 @@ public class Source extends Image {
 	super.onComponentTag(tag);
 	tag.setName("source");
 	if (this.media != null) {
-	    tag.put("media", this.media);
+	    tag.put("media", getMedia());
 	}
     }
 
     /**
+     * Sets the media attribute information
+     * 
      * @param media
-     *            the media attribute
+     *            the media attribute information
      */
     public void setMedia(String media) {
 	this.media = media;
+    }
+
+    /**
+     * Gets the media attribute information
+     * 
+     * @return
+     */
+    public String getMedia() {
+	return media;
     }
 }
