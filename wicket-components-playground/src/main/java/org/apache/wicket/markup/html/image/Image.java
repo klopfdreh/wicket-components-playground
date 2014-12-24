@@ -59,7 +59,7 @@ public class Image extends WebComponent implements IResourceListener {
     /** The image resource this image component references (src attribute) */
     private final LocalizedImageResource localizedImageResource = new LocalizedImageResource(this);
 
-    /** The image resources this image component references */
+    /** The image resources this image component references (srcset attribute)*/
     private final List<LocalizedImageResource> localizedImageResources = new ArrayList<LocalizedImageResource>();
 
     /** The x values to be used within the srcset */

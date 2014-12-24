@@ -109,7 +109,7 @@ HTML:
 	&lt;img wicket:id="image2"/&gt;
 </pre>
 
-Example implementation of img tag with overridden getImgaeResourceReference method:
+Example implementation of img tag with overridden getImageResourceReference method:
 
 Java:
 ```java
