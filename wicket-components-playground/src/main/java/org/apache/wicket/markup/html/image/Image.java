@@ -37,12 +37,20 @@ import org.apache.wicket.request.resource.ResourceReference;
 /**
  * An Image component displays localizable image resources.
  * <p>
- * For details of how Images load, generate and manage images, see {@link LocalizedImageResource}.
+ * For details of how Images load, generate and manage images, see
+ * {@link LocalizedImageResource}.
+ * 
+ * The first ResourceReference / ImageResource is used for the src attribute
+ * within the img tag, all following are applied to the srcset. If
+ * setXValues(String... values) is used the values are set behind the srcset
+ * elements in the order they are given to the setXValues(String... valus)
+ * method. The separated values in the sizes attribute are set with
+ * setSizes(String... sizes)
  * 
  * @see NonCachingImage
  * 
  * @author Jonathan Locke
- * @author Tobias Soloschenko 
+ * @author Tobias Soloschenko
  * 
  */
 public class Image extends WebComponent implements IResourceListener {

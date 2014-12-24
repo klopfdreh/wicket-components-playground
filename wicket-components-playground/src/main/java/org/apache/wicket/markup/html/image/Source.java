@@ -10,6 +10,11 @@ import org.apache.wicket.request.resource.ResourceReference;
 /**
  * A component which displays localizable image resources within a picture tag.
  * 
+ * The source tag is the same as the image element, but it is also possible to
+ * set the media attribute with setMedia(String media). The second difference is
+ * that there is no src attribute, so every ResourceReference and ImageResource
+ * is added directly to the srcset attribute. 
+ * 
  * @see org.apache.wicket.markup.html.image.Image
  * @author Tobias Soloschenko
  * 
@@ -68,6 +73,7 @@ public class Source extends Image {
 
     @Override
     protected void onComponentTag(ComponentTag tag) {
+	checkComponentTag(tag, "source");
 	super.onComponentTag(tag);
 	tag.setName("source");
 	if (this.media != null) {
