@@ -316,7 +316,7 @@ public class Image extends WebComponent implements IResourceListener {
 
 	    String srcset = tag.getAttribute("srcset");
 	    String xValue = this.xValues.size() > srcSetPosition && this.xValues.get(srcSetPosition) != null ? " " + this.xValues.get(srcSetPosition) : "";
-	    tag.put("srcset", (srcset != null ? srcset + " , " : "") + tag.getAttribute("src") + xValue);
+	    tag.put("srcset", (srcset != null ? srcset + ", " : "") + tag.getAttribute("src") + xValue);
 	    srcSetPosition++;
 	}
     }
