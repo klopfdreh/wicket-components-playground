@@ -114,9 +114,11 @@ public class Image extends WebComponent implements IResourceListener {
      * @param id
      *            See Component
      * @param resourceReference
-     *            The shared image resource
+     *            The shared image resource used in the src attribute
      * @param resourceParameters
      *            The resource parameters
+     * @param resourceReferences
+     *            The shared image resources used in the srcset attribute
      */
     public Image(final String id, final ResourceReference resourceReference, PageParameters resourceParameters, final ResourceReference... resourceReferences) {
 	super(id);
@@ -135,7 +137,9 @@ public class Image extends WebComponent implements IResourceListener {
      *            See Component
      * 
      * @param imageResource
-     *            The image resource
+     *            The image resource used in the src attribute
+     * @param imageResources
+     *            The image resource used in the srcset attribute
      */
     public Image(final String id, final IResource imageResource, final IResource... imageResources) {
 	super(id);

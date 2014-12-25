@@ -89,7 +89,7 @@ public class Source extends Image {
     /**
      * Gets the media attribute information
      * 
-     * @return
+     * @return the media attribute information
      */
     public String getMedia() {
 	return media;
