@@ -303,8 +303,8 @@ public class Image extends WebComponent implements IResourceListener {
     }
 
     /**
-     * Builds the src and srcset tag if multiple localizedImageResources are
-     * found
+     * Builds the srcset attribute if multiple localizedImageResources are
+     * found as varargs
      * 
      * @param tag
      *            the component tag
