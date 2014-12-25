@@ -59,7 +59,7 @@ public class Image extends WebComponent implements IResourceListener {
     /** The image resource this image component references (src attribute) */
     private final LocalizedImageResource localizedImageResource = new LocalizedImageResource(this);
 
-    /** The image resources this image component references (srcset attribute)*/
+    /** The image resources this image component references (srcset attribute) */
     private final List<LocalizedImageResource> localizedImageResources = new ArrayList<LocalizedImageResource>();
 
     /** The x values to be used within the srcset */
@@ -122,7 +122,7 @@ public class Image extends WebComponent implements IResourceListener {
      */
     public Image(final String id, final ResourceReference resourceReference, PageParameters resourceParameters, final ResourceReference... resourceReferences) {
 	super(id);
-	this.setImageResourceReference(resourceReference);
+	this.setImageResourceReference(resourceParameters, resourceReference);
 	this.setImageResourceReferences(resourceParameters, resourceReferences);
     }
 
@@ -181,7 +181,7 @@ public class Image extends WebComponent implements IResourceListener {
      *            The new ImageResource to set.
      */
     public void setImageResource(final IResource imageResource) {
-	if(imageResource !=null){	    
+	if (imageResource != null) {
 	    this.localizedImageResource.setResource(imageResource);
 	}
     }
@@ -202,25 +202,33 @@ public class Image extends WebComponent implements IResourceListener {
 
     /**
      * @param resourceReference
-     *            The shared ImageResource to set.
+     *            The resource reference to set.
      */
-    public void setImageResourceReference(final ResourceReference resourceReference) {
-	if(localizedImageResource != null){	    
-	    this.localizedImageResource.setResourceReference(resourceReference);
+    public void setImageResourceReference(final PageParameters parameters, final ResourceReference resourceReference) {
+	if (localizedImageResource != null) {
+	    if(parameters != null){		
+		this.localizedImageResource.setResourceReference(resourceReference, parameters);
+	    }else{		
+		this.localizedImageResource.setResourceReference(resourceReference);
+	    }
 	}
     }
 
     /**
-     * @param resourceReference
-     *            The shared ImageResource to set.
      * @param parameters
      *            Set the resource parameters for the resource.
+     * @param resourceReferences
+     *            The resource references to set.
      */
     public void setImageResourceReferences(final PageParameters parameters, final ResourceReference... resourceReferences) {
 	this.localizedImageResources.clear();
 	for (ResourceReference resourceReference : resourceReferences) {
 	    LocalizedImageResource localizedImageResource = new LocalizedImageResource(this);
-	    localizedImageResource.setResourceReference(resourceReference);
+	    if(parameters != null){		
+		localizedImageResource.setResourceReference(resourceReference, parameters);
+	    }else{
+		localizedImageResource.setResourceReference(resourceReference);		
+	    }
 	    this.localizedImageResources.add(localizedImageResource);
 	}
     }
@@ -303,8 +311,8 @@ public class Image extends WebComponent implements IResourceListener {
     }
 
     /**
-     * Builds the srcset attribute if multiple localizedImageResources are
-     * found as varargs
+     * Builds the srcset attribute if multiple localizedImageResources are found
+     * as varargs
      * 
      * @param tag
      *            the component tag
