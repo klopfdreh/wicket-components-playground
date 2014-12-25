@@ -70,7 +70,6 @@ public class Source extends Image {
     protected void onComponentTag(ComponentTag tag) {
 	checkComponentTag(tag, "source");
 	super.onComponentTag(tag);
-	tag.setName("source");
 	if (this.media != null) {
 	    tag.put("media", getMedia());
 	}
