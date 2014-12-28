@@ -150,7 +150,8 @@ Java:
 	public void renderHead(IHeaderResponse response)
 	{
 		super.renderHead(response);
-		response.render(CssHeaderItem.forImportUrl(getRequestCycle().urlFor(TestPage.class,null).toString()));
+		response.render(CssHeaderItem.forImportUrl(
+		getRequestCycle().urlFor(TestPage.class,null).toString()));
 	}
 ```
 
