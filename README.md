@@ -134,8 +134,8 @@ The x values are applied to the srcset element the way the values are given to t
 <b>Important: In FireFox 33 you have to enable it via flags - about:config &gt; dom.image.picture.enabled;true and dom.image.srcset.enabled;true</b>
 
 Further information: 
-http://responsiveimages.org/
-http://www.w3.org/html/wg/drafts/html/master/embedded-content.html#the-picture-element
+* http://responsiveimages.org/
+* http://www.w3.org/html/wg/drafts/html/master/embedded-content.html#the-picture-element
 
 HTML5 Import with Wicket
 ------------------
@@ -155,6 +155,6 @@ Java:
 ```
 
 Further information: 
-http://www.html5rocks.com/en/tutorials/webcomponents/imports/
-http://w3c.github.io/webcomponents/spec/imports/
+* http://www.html5rocks.com/en/tutorials/webcomponents/imports/
+* http://w3c.github.io/webcomponents/spec/imports/
 
