@@ -3,7 +3,6 @@ wicket-components-playground
 
 Playground for new Wicket components
 
-
 HTML5FilesDropablePanel
 ------------------
 This panel is able to handle HTML5 dropable events and receives the files which are dropped to the panel's markup. The style of the area is done via CSS in the markup. With the AjaxRequestTarget it's able to give a response to the client, for example to show that the files has been uploaded.
@@ -53,7 +52,6 @@ If the user uploads several files a request is made for every file to the handle
 <b>!!! The fileServletInputStream is closed after the handleReponse-Method is complete - so you don't have to be worried about that. !!!</b>
 
 TODO: Prevent multiple drops at the same time to one HTML5DropablePanel
-
 
 Refactoring of Wicket's image for HTML5 responsive image
 ------------------
@@ -135,4 +133,28 @@ The x values are applied to the srcset element the way the values are given to t
 
 <b>Important: In FireFox 33 you have to enable it via flags - about:config &gt; dom.image.picture.enabled;true and dom.image.srcset.enabled;true</b>
 
-Further information: http://responsiveimages.org/
+Further information: 
+http://responsiveimages.org/
+http://www.w3.org/html/wg/drafts/html/master/embedded-content.html#the-picture-element
+
+HTML5 Import with Wicket
+------------------
+
+With a little effort it is now possible to import html files with the link tag.
+
+Example:
+
+Java:
+```java
+	@Override
+	public void renderHead(IHeaderResponse response)
+	{
+		super.renderHead(response);
+		response.render(CssHeaderItem.forImportUrl(getRequestCycle().urlFor(TestPage.class,null).toString()));
+	}
+```
+
+Further information: 
+http://www.html5rocks.com/en/tutorials/webcomponents/imports/
+http://w3c.github.io/webcomponents/spec/imports/
+
