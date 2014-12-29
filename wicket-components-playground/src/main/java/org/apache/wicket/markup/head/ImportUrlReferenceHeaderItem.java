@@ -20,9 +20,26 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.UrlUtils;
 import org.apache.wicket.request.cycle.RequestCycle;
 
+/**
+ * The import url reference header item is used to import html files with the link tag
+ * 
+ * @see org.apache.wicket.markup.head.CssUrlReferenceHeaderItem
+ * @author Tobias Soloschenko
+ *
+ */
 public class ImportUrlReferenceHeaderItem extends CssUrlReferenceHeaderItem
 {
 
+	/**
+	 * Creates a new {@code ImportUrlReferenceHeaderItem}.
+	 * 
+	 * @param url
+	 *            context-relative url of the resource to import
+	 * @param media
+	 *            the media type for this import ("print", "screen", etc.)
+	 * @param condition
+	 *            the condition to use for Internet Explorer conditional comments. E.g. "IE 7".
+	 */
 	public ImportUrlReferenceHeaderItem(String url, String media, String condition)
 	{
 		super(url, media, condition);
