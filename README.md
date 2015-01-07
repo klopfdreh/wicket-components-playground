@@ -162,7 +162,7 @@ Java:
 	public void renderHead(IHeaderResponse response)
 	{
 		super.renderHead(response);
-		response.render(MetaDataHeaderItem.forImport(TestPage.class));
+		response.render(MetaDataHeaderItem.forImportLinkTag(TestPage.class));
 	}
 ```
 
