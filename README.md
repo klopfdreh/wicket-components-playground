@@ -154,6 +154,17 @@ Java:
 		getRequestCycle().urlFor(TestPage.class,null).toString()));
 	}
 ```
+Updated version with MetaDataHeaderItem:
+
+Java:
+```java
+	@Override
+	public void renderHead(IHeaderResponse response)
+	{
+		super.renderHead(response);
+		response.render(MetaDataHeaderItem.forImport(TestPage.class));
+	}
+```
 
 Further information: 
 * http://www.html5rocks.com/en/tutorials/webcomponents/imports/
