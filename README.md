@@ -137,6 +137,9 @@ Further information:
 * http://responsiveimages.org/
 * http://www.w3.org/html/wg/drafts/html/master/embedded-content.html#the-picture-element
 
+Implementation in the Wicket core project requested:
+* https://issues.apache.org/jira/browse/WICKET-5801
+
 HTML5 Import with Wicket
 ------------------
 
@@ -170,3 +173,5 @@ Further information:
 * http://www.html5rocks.com/en/tutorials/webcomponents/imports/
 * http://w3c.github.io/webcomponents/spec/imports/
 
+Implementation in the Wicket core project requested:
+* https://issues.apache.org/jira/browse/WICKET-5802
