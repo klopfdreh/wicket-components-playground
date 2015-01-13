@@ -173,5 +173,9 @@ Further information:
 * http://www.html5rocks.com/en/tutorials/webcomponents/imports/
 * http://w3c.github.io/webcomponents/spec/imports/
 
-Implementation in the Wicket core project requested:
-* https://issues.apache.org/jira/browse/WICKET-5802
+~~Implementation in the Wicket core project requested:~~
+* ~~https://issues.apache.org/jira/browse/WICKET-5802~~
+
+Integrated:
+* https://github.com/apache/wicket/commit/bf662852eb35f623e4c90b2b2d11334a956b1159 (Available with Wicket 6.19.0 / 7.0.0-M5)
+* CSSHeaderItem will be untouched
