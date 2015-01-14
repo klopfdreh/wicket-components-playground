@@ -179,3 +179,4 @@ Further information:
 Integrated:
 * https://github.com/apache/wicket/commit/bf662852eb35f623e4c90b2b2d11334a956b1159 (Available with Wicket 6.19.0 / 7.0.0-M5)
 * CSSHeaderItem will be untouched
+* To use the HTML5 Import the methods are implemented in the HtmlImportHeaderItem instead of MetaDataHeaderItem
