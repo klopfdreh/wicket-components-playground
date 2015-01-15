@@ -177,6 +177,7 @@ Further information:
 * ~~https://issues.apache.org/jira/browse/WICKET-5802~~
 
 Integrated:
-* https://github.com/apache/wicket/commit/bf662852eb35f623e4c90b2b2d11334a956b1159 (Available with Wicket 6.19.0 / 7.0.0-M5)
+* https://github.com/apache/wicket/commit/bf662852eb35f623e4c90b2b2d11334a956b1159 (Wicket 7.0.0-M5)
+* https://github.com/apache/wicket/commit/602f363969e57b13a0e611d48fcf2652209403e3 (Wicket 6.19.0)
 * CSSHeaderItem will be untouched
 * To use the HTML5 Import the methods are implemented in the HtmlImportHeaderItem instead of MetaDataHeaderItem
