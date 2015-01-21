@@ -213,10 +213,10 @@ Implementation of the HTML5 audio and video tags. Here is a little example, the 
 
 Java:
 ```java
-		Video video = new Video("video");
-		Source source = new Source("source", new MediaStreamingResourceReference(this.getClass(), "big.mp4"));
-		video.add(source);
-		this.add(video);
+	Video video = new Video("video");
+	Source source = new Source("source", new MediaStreamingResourceReference(this.getClass(), "big.mp4"));
+	video.add(source);
+	this.add(video);
 ```
 
 HTML:
