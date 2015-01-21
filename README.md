@@ -181,3 +181,28 @@ Integrated:
 * https://github.com/apache/wicket/commit/602f363969e57b13a0e611d48fcf2652209403e3 (Wicket 6.19.0)
 * CSSHeaderItem will be untouched
 * To use the HTML5 Import the methods are implemented in the HtmlImportHeaderItem instead of MetaDataHeaderItem
+
+ObserverBehavior
+------------------
+
+A little behavior to track events:
+
+Java:
+```java
+	Label label = new Label("label", "MyLabel");
+	label.add(new ObserveBehavior() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void processResponse(AjaxRequestTarget target, String data) throws JSONException {
+			System.err.println(this.getNewEventValueAsBoolean(data, "ctrlKey"));
+			System.err.println(this.getNewEventValueAsInt(data, "clientX"));
+			System.err.println(this.getText(data));
+			System.err.println(this.getHTML(data));
+			System.err.println(target);
+		}
+
+	}.forEvent(Event.mouseover));
+	this.add(label);
+		
+```
