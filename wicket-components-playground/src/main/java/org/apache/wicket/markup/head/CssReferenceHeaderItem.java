@@ -87,7 +87,7 @@ public class CssReferenceHeaderItem extends CssHeaderItem implements IReferenceH
 	}
 
 	@Override
-	public Iterable<? extends HeaderItem> getDependencies()
+	public List<HeaderItem> getDependencies()
 	{
 		return getReference().getDependencies();
 	}
@@ -103,7 +103,7 @@ public class CssReferenceHeaderItem extends CssHeaderItem implements IReferenceH
 	@Override
 	public void render(Response response)
 	{
-		internalRenderCSSReference(response, getUrl(), media, getCondition(),false);
+		internalRenderCSSReference(response, getUrl(), media, getCondition(), false);
 	}
 
 	@Override
