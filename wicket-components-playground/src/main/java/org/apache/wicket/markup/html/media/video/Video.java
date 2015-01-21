@@ -13,7 +13,8 @@ import org.apache.wicket.request.resource.ResourceReference;
  * 
  * @author Tobias Soloschenko
  */
-public class Video extends MediaComponent {
+public class Video extends MediaComponent
+{
 
 	private static final long serialVersionUID = 1L;
 
@@ -23,60 +24,78 @@ public class Video extends MediaComponent {
 
 	private Integer height;
 
-	public Video(String id) {
+	public Video(String id)
+	{
 		super(id);
 	}
 
-	public Video(String id, IModel<?> model) {
+	public Video(String id, IModel<?> model)
+	{
 		super(id, model);
 	}
 
-	public Video(String id, MediaStreamingResourceReference mediaStreamingResourceReference) {
+	public Video(String id, MediaStreamingResourceReference mediaStreamingResourceReference)
+	{
 		super(id, mediaStreamingResourceReference);
 	}
 
-	public Video(String id, IModel<?> model, MediaStreamingResourceReference mediaStreamingResourceReference) {
+	public Video(String id, IModel<?> model,
+		MediaStreamingResourceReference mediaStreamingResourceReference)
+	{
 		super(id, model, mediaStreamingResourceReference);
 	}
 
-	public Video(String id, MediaStreamingResourceReference mediaStreamingResourceReference, PageParameters pageParameters) {
+	public Video(String id, MediaStreamingResourceReference mediaStreamingResourceReference,
+		PageParameters pageParameters)
+	{
 		super(id, mediaStreamingResourceReference, pageParameters);
 	}
 
-	public Video(String id, IModel<?> model, MediaStreamingResourceReference mediaStreamingResourceReference, PageParameters pageParameters) {
+	public Video(String id, IModel<?> model,
+		MediaStreamingResourceReference mediaStreamingResourceReference,
+		PageParameters pageParameters)
+	{
 		super(id, model, mediaStreamingResourceReference, pageParameters);
 	}
 
-	public Video(String id, String url) {
+	public Video(String id, String url)
+	{
 		super(id, url);
 	}
 
-	public Video(String id, IModel<?> model, String url) {
+	public Video(String id, IModel<?> model, String url)
+	{
 		super(id, model, url);
 	}
 
-	public Video(String id, String url, PageParameters pageParameters) {
+	public Video(String id, String url, PageParameters pageParameters)
+	{
 		super(id, url, pageParameters);
 	}
 
-	public Video(String id, IModel<?> model, String url, PageParameters pageParameters) {
+	public Video(String id, IModel<?> model, String url, PageParameters pageParameters)
+	{
 		super(id, model, url, pageParameters);
 	}
 
 	@Override
-	protected void onComponentTag(ComponentTag tag) {
+	protected void onComponentTag(ComponentTag tag)
+	{
 		this.checkComponentTag(tag, "video");
 		super.onComponentTag(tag);
 
-		if (this.width != null) {
+		if (this.width != null)
+		{
 			tag.put("width", this.width);
 		}
 
-		if (this.height != null) {
+		if (this.height != null)
+		{
 			tag.put("height", this.height);
 		}
 
-		if (this.poster != null) {
+		if (this.poster != null)
+		{
 			tag.put("poster", RequestCycle.get().urlFor(this.poster, null));
 		}
 	}
@@ -86,7 +105,8 @@ public class Video extends MediaComponent {
 	 * 
 	 * @return the resource reference of the image
 	 */
-	public ResourceReference getPoster() {
+	public ResourceReference getPoster()
+	{
 		return this.poster;
 	}
 
@@ -96,7 +116,8 @@ public class Video extends MediaComponent {
 	 * @param the
 	 *            resource reference of the image used if the video isn't available
 	 */
-	public void setPoster(ResourceReference poster) {
+	public void setPoster(ResourceReference poster)
+	{
 		this.poster = poster;
 	}
 
@@ -105,7 +126,8 @@ public class Video extends MediaComponent {
 	 * 
 	 * @return the width of the video area
 	 */
-	public Integer getWidth() {
+	public Integer getWidth()
+	{
 		return this.width;
 	}
 
@@ -115,7 +137,8 @@ public class Video extends MediaComponent {
 	 * @param width
 	 *            the width of the video area
 	 */
-	public void setWidth(Integer width) {
+	public void setWidth(Integer width)
+	{
 		this.width = width;
 	}
 
@@ -124,7 +147,8 @@ public class Video extends MediaComponent {
 	 * 
 	 * @return the height of the video area
 	 */
-	public Integer getHeight() {
+	public Integer getHeight()
+	{
 		return this.height;
 	}
 
@@ -134,7 +158,8 @@ public class Video extends MediaComponent {
 	 * @param height
 	 *            the height of the video area
 	 */
-	public void setHeight(Integer height) {
+	public void setHeight(Integer height)
+	{
 		this.height = height;
 	}
 }

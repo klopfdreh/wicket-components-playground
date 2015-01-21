@@ -217,6 +217,17 @@ Java:
 	Source source = new Source("source", new MediaStreamingResourceReference(this.getClass(), "big.mp4"));
 	video.add(source);
 	this.add(video);
+	
+	// Other Example
+	Video video = new Video("video");
+	Source source = new Source("source", new MediaStreamingResourceReference(this.getClass(), "VfE_html5.mp4"));
+	video.add(source);
+	Track track = new Track("track",new PackageResourceReference(this.getClass(), "subtitles.vtt"));
+	track.setKind(Kind.subtitles);
+	track.setSrclang(Locale.GERMAN);
+	track.setDefaultTrack(true);
+	video.add(track);
+	this.add(video);
 ```
 
 HTML:
@@ -224,8 +235,13 @@ HTML:
 	&lt;video wicket:id="video"&gt;
 		&lt;source wicket:id="source" /&gt;
 	&lt;/video&gt;
+	
+	Other Example
+	&lt;video wicket:id="video"&gt;
+		&lt;source wicket:id="source" /&gt;
+		&lt;track wicket:id="track" /&gt;
+	&lt;/video&gt;
 </pre>
 
 TODOS: 
 * I18N Implementation of MediaStreamingResourceReference
-* Finalize Track-Tag
