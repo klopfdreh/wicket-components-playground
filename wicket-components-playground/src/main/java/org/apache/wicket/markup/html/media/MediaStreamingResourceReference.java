@@ -1,12 +1,10 @@
 package org.apache.wicket.markup.html.media;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.URL;
 import java.util.Locale;
 
 import org.apache.wicket.Application;
@@ -14,13 +12,13 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.protocol.http.servlet.ResponseIOException;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.resource.AbstractResource;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.util.time.Time;
 
 /**
  * The media streaming resource reference is used to provided streamed data based on bytes requested
@@ -43,7 +41,7 @@ public class MediaStreamingResourceReference extends ResourceReference
 
 	public MediaStreamingResourceReference(Class<?> scope, String name)
 	{
-		super(scope, name);
+		super(scope, name, RequestCycle.get().getRequest().getLocale(), null, null);
 	}
 
 	private MediaStreamingResourceReference(Key key)
@@ -59,13 +57,12 @@ public class MediaStreamingResourceReference extends ResourceReference
 	@Override
 	public IResource getResource()
 	{
-
 		AbstractResource mediaStreamingResource = new AbstractResource()
 		{
-
 			private static final long serialVersionUID = 1L;
 			private Long startbyte;
 			private Long endbyte;
+			private PackageResourceStream packageResourceStream;
 
 			@Override
 			protected ResourceResponse newResourceResponse(Attributes attributes)
@@ -79,16 +76,15 @@ public class MediaStreamingResourceReference extends ResourceReference
 						WebRequest webRequest = (WebRequest)request;
 						WebResponse webResponse = (WebResponse)response;
 
-						final String resourceName = MediaStreamingResourceReference.this.getName();
-						final Class<?> scope = MediaStreamingResourceReference.this.getScope();
-						final URL resource = scope.getResource(resourceName);
-						final File resourceFile = new File(resource.toURI());
+						packageResourceStream = new PackageResourceStream(getScope(), getName(),
+							getLocale(),getStyle(),getVariation());
+						long length = packageResourceStream.length().bytes();
 
 						ResourceResponse resourceResponse = new ResourceResponse();
-						resourceResponse.setContentType(Application.get().getMimeType(resourceName));
-						resourceResponse.setFileName(resourceName);
+						resourceResponse.setContentType(packageResourceStream.getContentType());
+						resourceResponse.setFileName(getName());
 						resourceResponse.setContentDisposition(ContentDisposition.ATTACHMENT);
-						resourceResponse.setLastModified(Time.millis(resourceFile.lastModified()));
+						resourceResponse.setLastModified(packageResourceStream.lastModifiedTime());
 
 						// We accept ranges, so that the player can
 						// load and play content from a specific byte position
@@ -99,7 +95,7 @@ public class MediaStreamingResourceReference extends ResourceReference
 						if (rangeHeader == null || "".equals(rangeHeader))
 						{
 							resourceResponse.setStatusCode(200);
-							resourceResponse.setContentLength(resourceFile.length());
+							resourceResponse.setContentLength(length);
 						}
 						else
 						{
@@ -115,11 +111,9 @@ public class MediaStreamingResourceReference extends ResourceReference
 							String[] rangeParts = range.split("-");
 							if (rangeParts[0].equals("0"))
 							{
-								webResponse.setHeader(
-									"Content-Range",
-									"bytes 0-" + (resourceFile.length() - 1) + "/" +
-										resourceFile.length());
-								resourceResponse.setContentLength(resourceFile.length());
+								webResponse.setHeader("Content-Range", "bytes 0-" + (length - 1) +
+									"/" + length);
+								resourceResponse.setContentLength(length);
 							}
 							else
 							{
@@ -130,10 +124,10 @@ public class MediaStreamingResourceReference extends ResourceReference
 								}
 								else
 								{
-									this.endbyte = resourceFile.length() - 1;
+									this.endbyte = length - 1;
 								}
 								webResponse.setHeader("Content-Range", "bytes " + this.startbyte +
-									"-" + this.endbyte + "/" + resourceFile.length());
+									"-" + this.endbyte + "/" + length);
 								resourceResponse.setContentLength((this.endbyte - this.startbyte) + 1);
 							}
 						}
@@ -145,7 +139,7 @@ public class MediaStreamingResourceReference extends ResourceReference
 							{
 								try
 								{
-									InputStream inputStream = scope.getResourceAsStream(resourceName);
+									InputStream inputStream = packageResourceStream.getInputStream();
 									OutputStream outputStream = attributes.getResponse()
 										.getOutputStream();
 									byte[] buffer = new byte[MediaStreamingResourceReference.this.getBuffer()];
@@ -192,6 +186,11 @@ public class MediaStreamingResourceReference extends ResourceReference
 									// org.apache.catalina.connector.ClientAbortException)
 									// we ignore this case
 								}
+								catch (Exception e)
+								{
+									StringWriter stringWriter = printStack(e);
+									throw new WicketRuntimeException(stringWriter.toString());
+								}
 							}
 						});
 
@@ -205,11 +204,39 @@ public class MediaStreamingResourceReference extends ResourceReference
 				}
 				catch (Exception e)
 				{
-					StringWriter stringWriter = new StringWriter();
-					PrintWriter printWriter = new PrintWriter(stringWriter);
-					e.printStackTrace(printWriter);
+					StringWriter stringWriter = printStack(e);
 					throw new WicketRuntimeException(stringWriter.toString());
 				}
+				finally
+				{
+					if (packageResourceStream != null)
+					{
+						try
+						{
+							packageResourceStream.close();
+						}
+						catch (IOException e)
+						{
+							StringWriter stringWriter = printStack(e);
+							throw new WicketRuntimeException(stringWriter.toString());
+						}
+					}
+				}
+			}
+
+			/**
+			 * Prints the stack trace to a print writer
+			 * 
+			 * @param exception
+			 *            the exception
+			 * @return the string writer containing the stack trace
+			 */
+			private StringWriter printStack(Exception exception)
+			{
+				StringWriter stringWriter = new StringWriter();
+				PrintWriter printWriter = new PrintWriter(stringWriter);
+				exception.printStackTrace(printWriter);
+				return stringWriter;
 			}
 		};
 		return mediaStreamingResource;

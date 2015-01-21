@@ -247,6 +247,3 @@ HTML:
 		&lt;track wicket:id="track" /&gt;
 	&lt;/video&gt;
 </pre>
-
-TODOS: 
-* I18N Implementation of MediaStreamingResourceReference
