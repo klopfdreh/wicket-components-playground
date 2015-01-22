@@ -10,6 +10,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  * An audio media component to playback audio files.
  * 
  * @author Tobias Soloschenko
+ * @author Andrew Lombardi
  * 
  */
 public class Audio extends MediaComponent

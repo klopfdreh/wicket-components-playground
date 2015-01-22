@@ -9,6 +9,13 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 
+/**
+ * The track tag is used to provide subtitles, captions, descriptions, chapters, metadata to a video
+ * media component
+ * 
+ * @author Tobias Soloschenko
+ * 
+ */
 public class Track extends WebMarkupContainer
 {
 
@@ -111,19 +118,27 @@ public class Track extends WebMarkupContainer
 		{
 			tag.put("kind", this.kind.name());
 		}
-		
+
 		if (this.label != null)
 		{
 			tag.put("label", this.label);
 		}
 
-		if (this.defaultTrack != null)
+		if (this.defaultTrack != null && this.defaultTrack)
 		{
 			tag.put("default", "default");
 		}
-		
-		if(srclang != null){			
-			tag.put("srclang", srclang.getLanguage());
+
+		// if the srclang field is set use this, else if the
+		// resource reference provides a locale use the language
+		// of the resource reference
+		if (this.srclang != null)
+		{
+			tag.put("srclang", this.srclang.getLanguage());
+		}
+		else if (this.resourceReference != null && this.resourceReference.getLocale() != null)
+		{
+			tag.put("srclang", this.resourceReference.getLocale().getLanguage());
 		}
 	}
 
@@ -198,7 +213,7 @@ public class Track extends WebMarkupContainer
 	 */
 	public Boolean getDefaultTrack()
 	{
-		return defaultTrack == null ? false : true;
+		return this.defaultTrack != null ? this.defaultTrack : false;
 	}
 
 	/**
@@ -219,12 +234,14 @@ public class Track extends WebMarkupContainer
 	 */
 	public Locale getSrclang()
 	{
-		return srclang;
+		return this.srclang;
 	}
 
 	/**
 	 * Sets the src lang
-	 * @param srclang the src lang to set
+	 * 
+	 * @param srclang
+	 *            the src lang to set
 	 */
 	public void setSrclang(Locale srclang)
 	{

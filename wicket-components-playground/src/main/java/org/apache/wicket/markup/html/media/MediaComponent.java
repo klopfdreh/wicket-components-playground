@@ -12,6 +12,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  * audio and video playback smooth.
  * 
  * @author Tobias Soloschenko
+ * @author Andrew Lombardi
  */
 public abstract class MediaComponent extends WebMarkupContainer
 {
@@ -34,6 +35,8 @@ public abstract class MediaComponent extends WebMarkupContainer
 	private String endTime;
 
 	private String mediaGroup;
+
+	private Cors crossorigin;
 
 	private PageParameters pageParameters;
 
@@ -112,33 +115,6 @@ public abstract class MediaComponent extends WebMarkupContainer
 	protected void onComponentTag(ComponentTag tag)
 	{
 		super.onComponentTag(tag);
-
-		if (this.autoplay != null)
-		{
-			tag.put("autoplay", this.autoplay);
-		}
-
-		if (this.loop != null)
-		{
-			tag.put("loop", this.loop);
-		}
-
-		if (this.muted != null)
-		{
-			tag.put("muted", this.muted);
-		}
-
-		// Use getter of controls here because they should be displayed as default
-		if (this.getControls() != null)
-		{
-			tag.put("controls", this.getControls());
-		}
-
-		if (this.preload != null)
-		{
-			tag.put("preload", this.preload.name());
-		}
-
 		// The time management is used to set the start / stop
 		// time in seconds of the movie to be played back
 		String timeManagement = "";
@@ -165,6 +141,37 @@ public abstract class MediaComponent extends WebMarkupContainer
 		{
 			tag.put("mediagroup", this.mediaGroup);
 		}
+
+		if (this.autoplay != null && this.autoplay)
+		{
+			tag.put("autoplay", "autoplay");
+		}
+
+		if (this.loop != null && this.loop)
+		{
+			tag.put("loop", "loop");
+		}
+
+		if (this.muted != null && this.muted)
+		{
+			tag.put("muted", "muted");
+		}
+
+		// Use getter here because controls should be visible by default
+		if (this.getControls())
+		{
+			tag.put("controls", "controls");
+		}
+
+		if (this.preload != null)
+		{
+			tag.put("preload", this.preload.name());
+		}
+
+		if (this.crossorigin != null)
+		{
+			tag.put("crossorigin", this.crossorigin.getRealName());
+		}
 	}
 
 	/**
@@ -180,8 +187,8 @@ public abstract class MediaComponent extends WebMarkupContainer
 	/**
 	 * Sets the playback to be autoplayed on load
 	 * 
-	 * @param If
-	 *            the playback is autoplayed on load
+	 * @param autoplay
+	 *            If the playback is autoplayed on load
 	 */
 	public void setAutoplay(Boolean autoplay)
 	{
@@ -201,8 +208,8 @@ public abstract class MediaComponent extends WebMarkupContainer
 	/**
 	 * Sets the playback to be looped
 	 * 
-	 * @param If
-	 *            the playback is looped
+	 * @param loop
+	 *            If the playback is looped
 	 */
 	public void setLoop(Boolean loop)
 	{
@@ -222,8 +229,8 @@ public abstract class MediaComponent extends WebMarkupContainer
 	/**
 	 * Sets the playback muted initially
 	 * 
-	 * @param If
-	 *            the playback is muted initially
+	 * @param muted
+	 *            If the playback is muted initially
 	 */
 	public void setMuted(Boolean muted)
 	{
@@ -243,7 +250,8 @@ public abstract class MediaComponent extends WebMarkupContainer
 	/**
 	 * Sets if the controls are going to be displayed
 	 * 
-	 * @param if the controls are going to displayed
+	 * @param controls
+	 *            if the controls are going to displayed
 	 */
 	public void setControls(Boolean controls)
 	{
@@ -251,24 +259,15 @@ public abstract class MediaComponent extends WebMarkupContainer
 	}
 
 	/**
-	 * The type of preload <br>
-	 * <br>
-	 * <b>none</b>: Hints to the user agent that either the author does not expect the user to need
-	 * the media resource, or that the server wants to minimise unnecessary traffic.<br>
-	 * <br>
-	 * <b>metadata</b>: Hints to the user agent that the author does not expect the user to need the
-	 * media resource, but that fetching the resource metadata (dimensions, first frame, track list,
-	 * duration, etc) is reasonable.<br>
-	 * <br>
-	 * <b>auto</b>: Hints to the user agent that the user agent can put the user's needs first
-	 * without risk to the server, up to and including optimistically downloading the entire
-	 * resource.
+	 * The type of preload
+	 * 
+	 * @see {@link #setPreload(Preload)}
 	 * 
 	 * @return the preload
 	 */
 	public Preload getPreload()
 	{
-		return this.preload != null ? this.preload : Preload.none;
+		return this.preload;
 	}
 
 	/**
@@ -285,8 +284,8 @@ public abstract class MediaComponent extends WebMarkupContainer
 	 * without risk to the server, up to and including optimistically downloading the entire
 	 * resource.
 	 * 
-	 * @param the
-	 *            preload
+	 * @param preload
+	 *            the preload
 	 */
 	public void setPreload(Preload preload)
 	{
@@ -294,21 +293,9 @@ public abstract class MediaComponent extends WebMarkupContainer
 	}
 
 	/**
-	 * Gets the position at which the media component starts the playback<br>
-	 * <br>
-	 * t=<b>10</b>,20<br>
-	 * t=<b>npt:10</b>,20<br>
-	 * <br>
+	 * Gets the position at which the media component starts the playback
 	 * 
-	 * t=<b>120s</b>,121.5s<br>
-	 * t=<b>npt:120</b>,0:02:01.5<br>
-	 * <br>
-	 * 
-	 * t=<b>smpte-30:0:02:00</b>,0:02:01:15<br>
-	 * t=<b>smpte-25:0:02:00:00</b>,0:02:01:12.1<br>
-	 * <br>
-	 * 
-	 * t=<b>clock:20090726T111901Z</b>,20090726T121901Z
+	 * @see {@link #setStartTime(String)}
 	 * 
 	 * @return the time at which position the media component starts the playback
 	 */
@@ -334,8 +321,8 @@ public abstract class MediaComponent extends WebMarkupContainer
 	 * 
 	 * t=<b>clock:20090726T111901Z</b>,20090726T121901Z
 	 * 
-	 * @param the
-	 *            time at which position the media component starts the playback
+	 * @param startTime
+	 *            the time at which position the media component starts the playback
 	 */
 	public void setStartTime(String startTime)
 	{
@@ -343,21 +330,9 @@ public abstract class MediaComponent extends WebMarkupContainer
 	}
 
 	/**
-	 * Gets the position at which the media component stops the playback<br>
-	 * <br>
-	 * t=10,<b>20</b><br>
-	 * t=npt:10,<b>20</b><br>
-	 * <br>
+	 * Gets the position at which the media component stops the playback
 	 * 
-	 * t=120s,<b>121.5s</b><br>
-	 * t=npt:120,<b>0:02:01.5</b><br>
-	 * <br>
-	 * 
-	 * t=smpte-30:0:02:00,<b>0:02:01:15</b><br>
-	 * t=smpte-25:0:02:00:00,<b>0:02:01:12.1</b><br>
-	 * <br>
-	 * 
-	 * t=clock:20090726T111901Z,<b>20090726T121901Z</b>
+	 * @see {@link #setEndTime(String)}
 	 * 
 	 * @return the time at which position the media component stops the playback
 	 */
@@ -383,8 +358,8 @@ public abstract class MediaComponent extends WebMarkupContainer
 	 * 
 	 * t=clock:20090726T111901Z,<b>20090726T121901Z</b>
 	 * 
-	 * @param the
-	 *            time at which position the media component stops the playback
+	 * @param endTime
+	 *            the time at which position the media component stops the playback
 	 */
 	public void setEndTime(String endTime)
 	{
@@ -413,11 +388,69 @@ public abstract class MediaComponent extends WebMarkupContainer
 	}
 
 	/**
+	 * Gets the cross origin settings
+	 * 
+	 * @see {@link #setCrossorigin(Cors)}
+	 * 
+	 * @return the cross origins settings
+	 */
+	public Cors getCrossorigin()
+	{
+		return this.crossorigin;
+	}
+
+	/**
+	 * Sets the cross origin settings<br>
+	 * <br>
+	 * 
+	 * <b>anonymous</b>: Cross-origin CORS requests for the element will not have the credentials
+	 * flag set.<br>
+	 * <br>
+	 * <b>use_credentials</b>: Cross-origin CORS requests for the element will have the credentials
+	 * flag set.<br>
+	 * <br>
+	 * <b>no_cores</b>: The empty string is also a valid keyword, and maps to the Anonymous state.
+	 * The attribute's invalid value default is the Anonymous state. The missing value default, used
+	 * when the attribute is omitted, is the No CORS state
+	 * 
+	 * @param crossorigin
+	 *            the cross origins settings to set
+	 */
+	public void setCrossorigin(Cors crossorigin)
+	{
+		this.crossorigin = crossorigin;
+	}
+
+	/**
 	 * To be used for the preload attribute
+	 * 
+	 * @see {@link #setPreload(Preload)}
 	 */
 	public enum Preload
 	{
 		none, metadata, auto
+	}
+
+	/**
+	 * To be used for the crossorigin attribute
+	 * 
+	 * @see {@link #setCrossorigin(Cors)}
+	 */
+	public enum Cors
+	{
+		anonymous("anonymous"), use_credentials("user-credentials"), no_cors("");
+
+		private String realName;
+
+		private Cors(String realName)
+		{
+			this.realName = realName;
+		}
+
+		public String getRealName()
+		{
+			return this.realName;
+		}
 	}
 
 }

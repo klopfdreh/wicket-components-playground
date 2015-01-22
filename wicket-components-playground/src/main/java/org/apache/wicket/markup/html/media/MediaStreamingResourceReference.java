@@ -44,12 +44,12 @@ public class MediaStreamingResourceReference extends ResourceReference
 		super(scope, name, RequestCycle.get().getRequest().getLocale(), null, null);
 	}
 
-	private MediaStreamingResourceReference(Key key)
+	public MediaStreamingResourceReference(Key key)
 	{
 		super(key);
 	}
 
-	private MediaStreamingResourceReference(String name)
+	public MediaStreamingResourceReference(String name)
 	{
 		super(name);
 	}
@@ -76,15 +76,19 @@ public class MediaStreamingResourceReference extends ResourceReference
 						WebRequest webRequest = (WebRequest)request;
 						WebResponse webResponse = (WebResponse)response;
 
-						packageResourceStream = new PackageResourceStream(getScope(), getName(),
-							getLocale(),getStyle(),getVariation());
-						long length = packageResourceStream.length().bytes();
+						this.packageResourceStream = new PackageResourceStream(
+							MediaStreamingResourceReference.this.getScope(),
+							MediaStreamingResourceReference.this.getName(),
+							MediaStreamingResourceReference.this.getLocale(),
+							MediaStreamingResourceReference.this.getStyle(),
+							MediaStreamingResourceReference.this.getVariation());
+						long length = this.packageResourceStream.length().bytes();
 
 						ResourceResponse resourceResponse = new ResourceResponse();
-						resourceResponse.setContentType(packageResourceStream.getContentType());
-						resourceResponse.setFileName(getName());
+						resourceResponse.setContentType(this.packageResourceStream.getContentType());
+						resourceResponse.setFileName(MediaStreamingResourceReference.this.getName());
 						resourceResponse.setContentDisposition(ContentDisposition.ATTACHMENT);
-						resourceResponse.setLastModified(packageResourceStream.lastModifiedTime());
+						resourceResponse.setLastModified(this.packageResourceStream.lastModifiedTime());
 
 						// We accept ranges, so that the player can
 						// load and play content from a specific byte position
@@ -204,20 +208,20 @@ public class MediaStreamingResourceReference extends ResourceReference
 				}
 				catch (Exception e)
 				{
-					StringWriter stringWriter = printStack(e);
+					StringWriter stringWriter = this.printStack(e);
 					throw new WicketRuntimeException(stringWriter.toString());
 				}
 				finally
 				{
-					if (packageResourceStream != null)
+					if (this.packageResourceStream != null)
 					{
 						try
 						{
-							packageResourceStream.close();
+							this.packageResourceStream.close();
 						}
 						catch (IOException e)
 						{
-							StringWriter stringWriter = printStack(e);
+							StringWriter stringWriter = this.printStack(e);
 							throw new WicketRuntimeException(stringWriter.toString());
 						}
 					}

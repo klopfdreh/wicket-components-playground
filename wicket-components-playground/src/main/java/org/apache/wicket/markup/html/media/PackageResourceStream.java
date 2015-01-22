@@ -40,7 +40,6 @@ import org.apache.wicket.util.time.Time;
  */
 public class PackageResourceStream extends AbstractResourceStream
 {
-	/** */
 	private static final long serialVersionUID = 1L;
 
 	private final IResourceStream resourceStream;
@@ -55,7 +54,8 @@ public class PackageResourceStream extends AbstractResourceStream
 	 * @param path
 	 *            The path to the resource
 	 */
-	public PackageResourceStream(Class<?> scope, String path,Locale locale,String style, String variation)
+	public PackageResourceStream(Class<?> scope, String path, Locale locale, String style,
+		String variation)
 	{
 		String absolutePath = Packages.absolutePath(scope, path);
 		resourceStream = Application.get()

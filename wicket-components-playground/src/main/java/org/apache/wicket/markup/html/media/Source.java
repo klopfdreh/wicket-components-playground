@@ -10,6 +10,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  * The source of an audio or a video media component
  * 
  * @author Tobias Soloschenko
+ * @author Andrew Lombardi
  * 
  */
 public class Source extends WebMarkupContainer
@@ -157,6 +158,7 @@ public class Source extends WebMarkupContainer
 	 * Gets the type
 	 * 
 	 * @see {@link #setType(String)}
+	 * 
 	 * @return the type of this media element
 	 */
 	public String getType()

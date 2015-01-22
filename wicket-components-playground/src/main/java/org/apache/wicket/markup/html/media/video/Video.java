@@ -12,17 +12,20 @@ import org.apache.wicket.request.resource.ResourceReference;
  * A video media component to display videos.
  * 
  * @author Tobias Soloschenko
+ * @author Andrew Lombardi
  */
 public class Video extends MediaComponent
 {
 
 	private static final long serialVersionUID = 1L;
 
-	private ResourceReference poster;
-
 	private Integer width;
 
 	private Integer height;
+
+	private ResourceReference poster;
+
+	private PageParameters posterPageParameters;
 
 	public Video(String id)
 	{
@@ -96,7 +99,7 @@ public class Video extends MediaComponent
 
 		if (this.poster != null)
 		{
-			tag.put("poster", RequestCycle.get().urlFor(this.poster, null));
+			tag.put("poster", RequestCycle.get().urlFor(this.poster, this.posterPageParameters));
 		}
 	}
 
@@ -111,14 +114,38 @@ public class Video extends MediaComponent
 	}
 
 	/**
+	 * Gets the posters page parameters
+	 * 
+	 * @return the page parameters for the poster
+	 */
+	public PageParameters getPosterPageParameters()
+	{
+		return this.posterPageParameters;
+	}
+
+	/**
 	 * Sets the image to be displayed if the video isn't available
 	 * 
-	 * @param the
-	 *            resource reference of the image used if the video isn't available
+	 * @param poster
+	 *            the resource reference of the image used if the video isn't available
 	 */
 	public void setPoster(ResourceReference poster)
 	{
 		this.poster = poster;
+	}
+
+	/**
+	 * Sets the image to be displayed if the video isn't available
+	 * 
+	 * @param poster
+	 *            the resource reference of the image used if the video isn't available
+	 * @param posterPageParameters
+	 *            the page parameters for the poster
+	 */
+	public void setPoster(ResourceReference poster, PageParameters posterPageParameters)
+	{
+		this.poster = poster;
+		this.posterPageParameters = posterPageParameters;
 	}
 
 	/**
