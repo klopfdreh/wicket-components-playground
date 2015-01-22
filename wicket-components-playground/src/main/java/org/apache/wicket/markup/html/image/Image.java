@@ -61,10 +61,15 @@ public class Image extends WebComponent implements IResourceListener
 	private final List<LocalizedImageResource> localizedImageResources = new ArrayList<LocalizedImageResource>();
 
 	/** The x values to be used within the srcset */
-	private final List<String> xValues = new ArrayList<String>();
+	private List<String> xValues = null;
 
 	/** The sizes of the responsive images */
-	private final List<String> sizes = new ArrayList<String>();
+	private List<String> sizes = null;
+	
+	/**
+	 * Cross origin settings
+	 */
+	private Cors crossorigin = null;
 
 	/**
 	 * This constructor can be used if you override {@link #getImageResourceReference()} or
@@ -261,6 +266,10 @@ public class Image extends WebComponent implements IResourceListener
 	 */
 	public void setXValues(String... values)
 	{
+		if (this.xValues == null)
+		{
+			xValues = new ArrayList<String>();
+		}
 		this.xValues.clear();
 		this.xValues.addAll(Arrays.asList(values));
 	}
@@ -271,6 +280,10 @@ public class Image extends WebComponent implements IResourceListener
 	 */
 	public void setSizes(String... sizes)
 	{
+		if (this.sizes == null)
+		{
+			this.sizes = new ArrayList<String>();
+		}
 		this.sizes.clear();
 		this.sizes.addAll(Arrays.asList(sizes));
 	}
@@ -339,8 +352,13 @@ public class Image extends WebComponent implements IResourceListener
 			String srcAttribute = this.buildSrcAttribute(tag);
 			this.buildSrcSetAttribute(tag);
 			tag.put("src", srcAttribute);
+			
 		}
 		this.buildSizesAttribute(tag);
+		
+		if (this.crossorigin != null) {
+			tag.put("crossorigin", this.crossorigin.getRealName());
+		}
 	}
 
 	/**
@@ -362,9 +380,15 @@ public class Image extends WebComponent implements IResourceListener
 			}
 
 			String srcset = tag.getAttribute("srcset");
-			String xValue = this.xValues.size() > srcSetPosition &&
-				this.xValues.get(srcSetPosition) != null ? " " + this.xValues.get(srcSetPosition)
-				: "";
+			String xValue = "";
+			
+			// If there are xValues set process them in the applied order to the srcset attribute.
+			if (this.xValues != null)
+			{
+				xValue = this.xValues.size() > srcSetPosition &&
+					this.xValues.get(srcSetPosition) != null ? " " +
+					this.xValues.get(srcSetPosition) : "";
+			}
 			tag.put("srcset", (srcset != null ? srcset + ", " : "") + tag.getAttribute("src") +
 				xValue);
 			srcSetPosition++;
@@ -407,6 +431,11 @@ public class Image extends WebComponent implements IResourceListener
 	 */
 	protected void buildSizesAttribute(final ComponentTag tag)
 	{
+		// if no sizes have been set then don't build the attribute
+		if (this.sizes == null)
+		{
+			return;
+		}
 		String sizes = "";
 		for (String size : this.sizes)
 		{
@@ -493,6 +522,56 @@ public class Image extends WebComponent implements IResourceListener
 		else
 		{
 			return super.canCallListenerInterface(method);
+		}
+	}
+	
+	/**
+	 * Gets the cross origin settings
+	 * 
+	 * @see {@link #setCrossorigin(Cors)}
+	 * 
+	 * @return the cross origins settings
+	 */
+	public Cors getCrossorigin() {
+		return this.crossorigin;
+	}
+
+	/**
+	 * Sets the cross origin settings<br>
+	 * <br>
+	 * 
+	 * <b>anonymous</b>: Cross-origin CORS requests for the element will not have the credentials flag set.<br>
+	 * <br>
+	 * <b>use_credentials</b>: Cross-origin CORS requests for the element will have the credentials flag set.<br>
+	 * <br>
+	 * <b>no_cores</b>: The empty string is also a valid keyword, and maps to the Anonymous state. The attribute's invalid value default is the
+	 * Anonymous state. The missing value default, used when the attribute is omitted, is the No CORS state
+	 * 
+	 * @param crossorigin
+	 *            the cross origins settings to set
+	 */
+	public void setCrossorigin(Cors crossorigin) {
+		this.crossorigin = crossorigin;
+	}
+
+	/**
+	 * To be used for the crossorigin attribute
+	 * 
+	 * @see {@link #setCrossorigin(Cors)}
+	 */
+	public enum Cors {
+		anonymous("anonymous"),
+		use_credentials("user-credentials"),
+		no_cors("");
+
+		private String realName;
+
+		private Cors(String realName) {
+			this.realName = realName;
+		}
+
+		public String getRealName() {
+			return this.realName;
 		}
 	}
 }

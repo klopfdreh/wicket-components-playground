@@ -38,7 +38,7 @@ public class Source extends Image
 
 	private static final long serialVersionUID = 1L;
 
-	private String media;
+	private String media = null;
 
 	/**
 	 * @see org.apache.wicket.markup.html.image.Image
@@ -119,5 +119,21 @@ public class Source extends Image
 	public String getMedia()
 	{
 		return media;
+	}
+	
+	/**
+	 * Unsupported for source tag
+	 */
+	@Override
+	public void setCrossorigin(Cors crossorigin) {
+		throw new UnsupportedOperationException("It is not allowed to set the crossorigin attribute for source tag");
+	}
+	
+	/**
+	 * Unsupported for source tag
+	 */
+	@Override
+	public Cors getCrossorigin() {
+		throw new UnsupportedOperationException("It is not allowed to get the crossorigin attribute for source tag");
 	}
 }
