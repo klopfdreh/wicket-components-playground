@@ -248,4 +248,6 @@ HTML:
 	&lt;/video&gt;
 </pre>
 
-TODO: Unit tests!
+Implementation in the Wicket core project requested:
+
+https://issues.apache.org/jira/browse/WICKET-5819
