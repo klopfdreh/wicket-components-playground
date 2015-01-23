@@ -248,6 +248,13 @@ HTML:
 	&lt;/video&gt;
 </pre>
 
+Further information: 
+
+* http://www.w3schools.com/html/html5_video.asp
+* http://www.w3schools.com/html/html5_audio.asp
+
+* http://dev.w3.org/html5/spec-author-view/video.html
+
 Implementation in the Wicket core project requested:
 
-https://issues.apache.org/jira/browse/WICKET-5819
+* https://issues.apache.org/jira/browse/WICKET-5819
