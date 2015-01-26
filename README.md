@@ -262,7 +262,7 @@ Implementation in the Wicket core project requested:
 HTML5 Shapes
 ------------------
 
-The shapes are currently not working within in FF and IE, but all other browser supports them.
+The shapes are currently not working within in FF and IE, but all other browser are supporting shapes. They are used to let inline elements like text move along them - for example around one side of a background picture.
 
 Java:
 ```java
