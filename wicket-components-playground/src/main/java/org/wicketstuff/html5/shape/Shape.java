@@ -68,9 +68,10 @@ public class Shape extends WebMarkupContainer
 	{
 		String shapeDefinition = "shape-outside: " + this.shapeType.getName() + "(" +
 			this.shapeType.getValues() + ");";
-		String css = String.format("." + this.getMarkupId() + "{ float: %s %s %s %s ",
+		String css = String.format("." + this.getMarkupId() + "{ float: %s %s %s %s %s %s",
 			this.getOrientation().name() + ";", this.getDimension(), "-webkit-" + shapeDefinition,
-			shapeDefinition);
+			shapeDefinition, "-webkit-shape-margin:" + getMargin() + ";", "shape-margin:" +
+				getMargin() + ";");
 		String transitionCss = "";
 		if (this.transitionShapeType != null)
 		{
