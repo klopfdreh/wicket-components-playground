@@ -258,3 +258,35 @@ Further information:
 Implementation in the Wicket core project requested:
 
 * https://issues.apache.org/jira/browse/WICKET-5819
+
+HTML5 Shapes
+------------------
+
+The shapes are currently not working within in FF and IE, but all other browser supports them.
+
+Java:
+```java
+
+	add(new Shape("shapeleft").shapeType(new CircleShapeType("30%"))
+		.transitionShapeType(new CircleShapeType("50%"))
+		.useWidth("500px")
+		.useHeight("500px"));
+	add(new Shape("shaperight").shapeType(new CircleShapeType("30%"))
+		.transitionShapeType(new CircleShapeType("50%"))
+		.useWidth("500px")
+		.useHeight("500px")
+		.orientation(Orientation.right));
+```
+
+HTML:
+<pre>
+	&lt;div&gt;
+		&lt;div wicket:id="shapeleft"&gt;&lt;/div&gt;
+		&lt;div wicket:id="shaperight"&gt;&lt;/div&gt;
+		... some text...
+	&lt;/div&gt;
+</pre>
+
+Further information:
+* http://www.html5rocks.com/en/tutorials/shapes/getting-started/
+* http://dev.w3.org/csswg/css-shapes/
