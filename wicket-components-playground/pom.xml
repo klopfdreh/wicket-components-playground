@@ -17,7 +17,7 @@
 
 	<properties>
 		<commons.io.version>2.4</commons.io.version>
-		<wicket.version>7.0.0-SNAPSHOT</wicket.version>
+		<wicket.version>7.0.0-M4</wicket.version>
 		<servlet.api.version>2.5</servlet.api.version>
 		<slf4j.version>1.7.7</slf4j.version>
 	</properties>
