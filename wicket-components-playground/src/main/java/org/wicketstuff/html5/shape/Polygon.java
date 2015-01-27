@@ -9,7 +9,7 @@ import java.util.List;
  * @author Tobias Soloschenko
  *
  */
-public class PolygonShapeType extends AbstractShapeType
+public class Polygon extends AbstractShape
 {
 
 	private List<String> keyValuePairs;
@@ -21,7 +21,7 @@ public class PolygonShapeType extends AbstractShapeType
 	 *            the key value pairs (x1,y1,x2,y2,x3,y3,..) - the number must be even and there has
 	 *            to be at least 3 pairs
 	 */
-	public PolygonShapeType(String... keyValuePairs)
+	public Polygon(String... keyValuePairs)
 	{
 		if (keyValuePairs.length % 2 != 0)
 		{

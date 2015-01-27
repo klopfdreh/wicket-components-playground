@@ -266,13 +266,12 @@ The shapes are currently not working within in FF and IE, but all other browser 
 
 Java:
 ```java
-
-	add(new Shape("shapeleft").shapeType(new CircleShapeType("30%"))
-		.transitionShapeType(new CircleShapeType("50%"))
+	add(new ShapeBuilder("shapeleft").shape(new Circle("30%"))
+		.transition(new Circle("50%"))
 		.useWidth("500px")
 		.useHeight("500px"));
-	add(new Shape("shaperight").shapeType(new CircleShapeType("30%"))
-		.transitionShapeType(new CircleShapeType("50%"))
+	add(new ShapeBuilder("shaperight").shape(new Circle("30%"))
+		.transition(new Circle("50%"))
 		.useWidth("500px")
 		.useHeight("500px")
 		.orientation(Orientation.right));

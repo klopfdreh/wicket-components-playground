@@ -7,7 +7,7 @@ package org.wicketstuff.html5.shape;
  * @author Tobias Soloschenko
  *
  */
-public class InsetShapeType extends AbstractShapeType
+public class Inset extends AbstractShape
 {
 
 	private String top;
@@ -30,7 +30,7 @@ public class InsetShapeType extends AbstractShapeType
 	 * @param border_radius
 	 *            the radius
 	 */
-	public InsetShapeType(String top, String right, String bottom, String left, String border_radius)
+	public Inset(String top, String right, String bottom, String left, String border_radius)
 	{
 		this.top = top;
 		this.right = right;
@@ -39,7 +39,7 @@ public class InsetShapeType extends AbstractShapeType
 		this.border_radius = border_radius;
 	}
 
-	public InsetShapeType(String top, String right, String bottom, String left)
+	public Inset(String top, String right, String bottom, String left)
 	{
 		this(top, right, bottom, left, null);
 	}

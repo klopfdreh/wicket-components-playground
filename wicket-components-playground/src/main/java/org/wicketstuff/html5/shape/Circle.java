@@ -6,7 +6,7 @@ package org.wicketstuff.html5.shape;
  * @author Tobias Soloschenko
  *
  */
-public class CircleShapeType extends AbstractShapeType
+public class Circle extends AbstractShape
 {
 
 	private String radius;
@@ -19,7 +19,7 @@ public class CircleShapeType extends AbstractShapeType
 	 * @param radius
 	 *            the radius of the circle
 	 */
-	public CircleShapeType(String radius)
+	public Circle(String radius)
 	{
 		this(radius, null, null);
 	}
@@ -34,7 +34,7 @@ public class CircleShapeType extends AbstractShapeType
 	 * @param y
 	 *            the y position of the circle
 	 */
-	public CircleShapeType(String radius, String x, String y)
+	public Circle(String radius, String x, String y)
 	{
 		this.radius = radius;
 		this.x = x;

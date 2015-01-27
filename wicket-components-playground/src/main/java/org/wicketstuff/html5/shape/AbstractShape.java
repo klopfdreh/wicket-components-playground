@@ -6,7 +6,7 @@ package org.wicketstuff.html5.shape;
  * @author Tobias Soloschenko
  *
  */
-public abstract class AbstractShapeType implements ShapeType
+public abstract class AbstractShape implements Shape
 {
 
 	private String transitionTime;
@@ -26,7 +26,7 @@ public abstract class AbstractShapeType implements ShapeType
 	 *            the transition time of the shape. Example: 5s (5 seconds)
 	 */
 	@Override
-	public ShapeType transitionTime(String transitionTime)
+	public Shape transitionTime(String transitionTime)
 	{
 		this.transitionTime = transitionTime;
 		return this;

@@ -6,7 +6,7 @@ package org.wicketstuff.html5.shape;
  * @author Tobias Soloschenko
  *
  */
-public class EllipseShapeType extends AbstractShapeType
+public class Ellipse extends AbstractShape
 {
 
 	private String xradius;
@@ -23,7 +23,7 @@ public class EllipseShapeType extends AbstractShapeType
 	 * @param yradius
 	 *            the radius of the y axis
 	 */
-	public EllipseShapeType(String xradius, String yradius)
+	public Ellipse(String xradius, String yradius)
 	{
 		this(xradius, yradius, null, null);
 		this.xradius = xradius;
@@ -42,7 +42,7 @@ public class EllipseShapeType extends AbstractShapeType
 	 * @param y
 	 *            the y position
 	 */
-	public EllipseShapeType(String xradius, String yradius, String x, String y)
+	public Ellipse(String xradius, String yradius, String x, String y)
 	{
 		this.xradius = xradius;
 		this.yradius = yradius;

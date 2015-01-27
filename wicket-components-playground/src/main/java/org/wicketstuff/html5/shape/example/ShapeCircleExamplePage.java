@@ -1,9 +1,9 @@
 package org.wicketstuff.html5.shape.example;
 
 import org.apache.wicket.markup.html.WebPage;
-import org.wicketstuff.html5.shape.CircleShapeType;
-import org.wicketstuff.html5.shape.Shape;
-import org.wicketstuff.html5.shape.Shape.Orientation;
+import org.wicketstuff.html5.shape.Circle;
+import org.wicketstuff.html5.shape.ShapeBuilder;
+import org.wicketstuff.html5.shape.ShapeBuilder.Orientation;
 
 public class ShapeCircleExamplePage extends WebPage
 {
@@ -12,12 +12,12 @@ public class ShapeCircleExamplePage extends WebPage
 
 	public ShapeCircleExamplePage()
 	{
-		add(new Shape("shapeleft").shapeType(new CircleShapeType("30%"))
-			.transitionShapeType(new CircleShapeType("50%"))
+		add(new ShapeBuilder("shapeleft").shape(new Circle("30%"))
+			.transition(new Circle("50%"))
 			.useWidth("500px")
 			.useHeight("500px"));
-		add(new Shape("shaperight").shapeType(new CircleShapeType("30%"))
-			.transitionShapeType(new CircleShapeType("50%"))
+		add(new ShapeBuilder("shaperight").shape(new Circle("30%"))
+			.transition(new Circle("50%"))
 			.useWidth("500px")
 			.useHeight("500px")
 			.orientation(Orientation.right));
