@@ -297,3 +297,13 @@ HTML:
 Further information:
 * http://www.html5rocks.com/en/tutorials/shapes/getting-started/
 * http://dev.w3.org/csswg/css-shapes/
+
+- Available in Version 6.19.0 / 7.0.0-M5 of a wicketstuff project. (wicketstuff-jee-web)
+- Dependency:
+<pre>
+   &lt;dependency&gt;
+      &lt;groupId&gt;org.wicketstuff&lt;/groupId&gt;
+      &lt;artifactId&gt;wicketstuff-html5&lt;/artifactId&gt;
+      &lt;version&gt;/version/&lt;/version&gt;
+   &lt;/dependency&gt;
+</pre>
