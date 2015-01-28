@@ -256,11 +256,9 @@ HTML:
 	&lt;/video&gt;
 </pre>
 
-Further information: 
-
+Further information:
 * http://www.w3schools.com/html/html5_video.asp
 * http://www.w3schools.com/html/html5_audio.asp
-
 * http://dev.w3.org/html5/spec-author-view/video.html
 
 Implementation in the Wicket core project requested:
@@ -298,8 +296,8 @@ Further information:
 * http://www.html5rocks.com/en/tutorials/shapes/getting-started/
 * http://dev.w3.org/csswg/css-shapes/
 
-- Available in Version 6.19.0 / 7.0.0-M5 of a wicketstuff project. (wicketstuff-jee-web)
-- Dependency:
+Available in Version 6.19.0 / 7.0.0-M5 of a wicketstuff project. (wicketstuff-jee-web)
+Dependency:
 <pre>
    &lt;dependency&gt;
       &lt;groupId&gt;org.wicketstuff&lt;/groupId&gt;
