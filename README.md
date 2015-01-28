@@ -137,8 +137,16 @@ Further information:
 * http://responsiveimages.org/
 * http://www.w3.org/html/wg/drafts/html/master/embedded-content.html#the-picture-element
 
-Implementation in the Wicket core project requested:
-* https://issues.apache.org/jira/browse/WICKET-5801
+~~Implementation in the Wicket core project requested:~~
+* ~~https://issues.apache.org/jira/browse/WICKET-5801~~
+
+Integrated:
+* The Enumerations of the CORS settings are big, now
+* The integration is only for Wicket 7.0.0-M5
+* https://github.com/apache/wicket/commit/0880713fa15ee8ce67c8005759312964609f5e7c
+* https://github.com/apache/wicket/commit/6b31d4c64b8ee0dd3b513025eebec9ae75ff2893
+* https://github.com/apache/wicket/commit/2948a2c16088a83bfad09f5ce1d3febc5f868766
+* https://github.com/apache/wicket/commit/6d0eae5f4f8fcfd9e56dc2bf6115feb970d32a82
 
 HTML5 Import with Wicket
 ------------------
