@@ -304,6 +304,7 @@ Dependency:
       &lt;artifactId&gt;wicketstuff-html5&lt;/artifactId&gt;
       &lt;version&gt;/version/&lt;/version&gt;
    &lt;/dependency&gt;
+</pre>
 
 WebRTC Integration for Wicket
 ------------------
