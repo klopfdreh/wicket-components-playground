@@ -304,4 +304,62 @@ Dependency:
       &lt;artifactId&gt;wicketstuff-html5&lt;/artifactId&gt;
       &lt;version&gt;/version/&lt;/version&gt;
    &lt;/dependency&gt;
+
+WebRTC Integration for Wicket
+------------------
+
+In order to use the integration of WebRTC you have to process the following steps which are required for the data transfer / the communication layer. There are two servers required to communicate. The first is the STUN / TURN server so that the clients can communicate even if they are behind a NAT. The second is a signal server which provides a websocket layer so that the client can update data of other clients. For default the public google STUN server is used stun.l.google.com:19302. 
+
+Installing the Signal Server:
+* Download and install nodejs (http://nodejs.org)
+* Copy the "server.js" and the "dev_config" file to the place where you want to start it from (see soures)
+* Install socket.io / node-uuid / getconfig - "npm install socket.io@0.9.16 node-uuid@1.2.0 getconfig@0.3.0"
+* Start the signal server with "node server.js"
+* The listening port is 8000
+
+Wicket Java Integration:
+* Use the WebRTC classes provided in this package
+* The video id provided with getLocalVideoId is the one you created the Video media tag with (Important: setOutputMarkupId(true))
+* With getRoomName() the name of the room is provided in which people are joining to and here they are able to speak to each other - this name can be dynamically provided from the wicket application 
+* With getSocketIOUrl() the url to the signal server should be given (Example:http://192.168.2.110:8000)
+
+Java:
+```java
+	final Video video = new Video("video");
+	video.setOutputMarkupId(true);
+	video.setControls(false);
+	this.add(video);
+	
+	WebRTC webrtc = new WebRTC("webrtc")
+	{
+		private static final long serialVersionUID = 1L;
+	
+		@Override
+		public String getLocalVideoId()
+		{
+			return video.getMarkupId();
+		}
+	
+		@Override
+		public String getRoomName()
+		{
+			return "roomname";
+		}
+	
+		@Override
+		public String getSocketIOUrl()
+		{
+			return "http://192.168.2.110:8000";
+		}
+	};
+	this.add(webrtc);
+```
+
+HTML:
+<pre>
+	&lt;div class="localvideo"&gt;
+		&lt;video wicket:id="video" /&gt;
+		&lt;div id="localvolume" class="volumebar"&gt;&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div wicket:id="webrtc"&gt;&lt;/div&gt;
 </pre>
