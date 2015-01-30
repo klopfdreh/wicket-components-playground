@@ -360,7 +360,7 @@ HTML:
 <pre>
 	&lt;div class="localvideo"&gt;
 		&lt;video wicket:id="video" /&gt;
-		&lt;div id="localvolume" class="volumebar"&gt;&lt;/div&gt;
+		&lt;div id="localvolume" class="volumebar"&gt;&lt;/div&gt; &lt;!-- optional tag --&gt;
 	&lt;/div&gt;
 	&lt;div wicket:id="webrtc"&gt;&lt;/div&gt;
 </pre>
