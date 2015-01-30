@@ -314,7 +314,7 @@ In order to use the integration of WebRTC you have to process the following step
 Installing the Signal Server:
 * Download and install nodejs (http://nodejs.org)
 * Copy the "server.js" and the "dev_config.json" file to the place where you want to start it from (see soures)
-* Install socket.io / node-uuid / getconfig - "npm install socket.io@0.9.16 node-uuid@1.2.0 getconfig@0.3.0"
+* Install socket.io / node-uuid / getconfig - "npm install socket.io@0.9.16 node-uuid@1.2.0 getconfig@0.3.0" (run this command in the same directory which contains the "server.js" and the "dev_config.json")
 * Start the signal server with "node server.js"
 * The listening port is 8000
 
