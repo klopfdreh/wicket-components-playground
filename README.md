@@ -306,7 +306,7 @@ Dependency:
    &lt;/dependency&gt;
 </pre>
 
-WebRTC Integration for Wicket
+Wicket WebRTC Integration
 ------------------
 
 In order to use the integration of WebRTC you have to process the following steps which are required for the data transfer / the communication layer. There are two servers required to communicate. The first is the STUN / TURN server so that the clients can communicate even if they are behind a NAT. The second is a signal server which provides a websocket layer so that the client can update data of other clients. For default the public google STUN server is used stun.l.google.com:19302. 
@@ -319,10 +319,10 @@ Installing the Signal Server:
 * The listening port is 8000
 
 Wicket Java Integration:
-* Use the WebRTC classes provided in this package
-* The video id provided with getLocalVideoId is the one you created the Video media tag with (Important: setOutputMarkupId(true))
-* With getRoomName() the name of the room is provided in which people are joining to and here they are able to speak to each other - this name can be dynamically provided from the wicket application 
-* With getSocketIOUrl() the url to the signal server should be given (Example:http://192.168.2.110:8000)
+* Use the WebRTC class to display the video conference
+* The video id defined by overriding getLocalVideoId is the one you created the Video media tag with (Important: setOutputMarkupId(true) - for the video tag)
+* getRoomName() is used to configure the room name people are able to join to and - this name can be dynamically provided from the wicket application
+* Use getSocketIOUrl() to configure the url to the signal server (Example:http://192.168.2.110:8000)
 
 Java:
 ```java
@@ -364,3 +364,12 @@ HTML:
 	&lt;/div&gt;
 	&lt;div wicket:id="webrtc"&gt;&lt;/div&gt;
 </pre>
+
+Further information:
+* http://www.html5rocks.com/en/tutorials/webrtc/basics/
+* https://github.com/andyet/signalmaster
+* https://github.com/HenrikJoreteg/SimpleWebRTC
+* https://github.com/HenrikJoreteg/webrtc.js
+
+Special thanks to:
+* Jörn Zaefferer who helped me out with NodeJS. :-)
