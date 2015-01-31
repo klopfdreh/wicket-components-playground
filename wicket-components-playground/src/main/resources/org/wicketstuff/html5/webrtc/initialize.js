@@ -19,7 +19,7 @@ $(function(){
 	    webrtc.joinRoom('%s');
 	}); 
 	
-	// Shows the volumn bar in the video elements
+	// Shows the volume bar in the video elements
 	function showVolume(el, volume) {
 	    if (!el) return;
 	    if (volume < -45) { // vary between -45 and -20
@@ -31,14 +31,14 @@ $(function(){
 	    }
 	}
 	
-	// If a message is received the volumn is going to be refreshed
+	// If a message is received the volume is going to be refreshed
 	webrtc.on('channelMessage', function (peer, label, data) {
 	    if (data.type == 'volume') {
 	        showVolume(document.getElementById('volume_' + peer.id), data.volume);
 	    }
 	});
 	
-	// If a new user joins another video element is added and a volumn bar is created for the video element
+	// If a new user joins another video element is added and a volume bar is created for the video element
 	webrtc.on('videoAdded', function (video, peer) {
 		var remotes = document.getElementById('%s');
 	    if (remotes) {
@@ -67,7 +67,7 @@ $(function(){
 	    }
 	});
 	
-	// If the volumn changed the current volumne should be displayed
+	// If the volume changed the current volume should be displayed
 	webrtc.on('volumeChange', function (volume, treshold) {
 	    showVolume(document.getElementById('localvolume'), volume);
 	});
