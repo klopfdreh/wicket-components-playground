@@ -373,3 +373,33 @@ Further information:
 
 Special thanks to:
 * Jörn Zaefferer who helped me out with NodeJS. :-)
+
+CssUrlReplacer
+------------------
+
+The CssUrlReplacer is used to replace url definitions like "background-image:url('myPicture.gif');" by Wickets representatives. The new generated URLS are computed with PackageResourceReferences. The main benefit is that you are able to render CSS files with CssHeaderItem and place pictures at the same level of the Page. The Resource is detected by the name of the image within the url and replaced with a URL which can be resolved by Wicket. 
+
+Note: The URL is only replaced if it doesn't contain any kind of path syntax like "./" or "http://"
+
+Java (In Applications init-Method):
+```java
+	this.getResourceSettings().setCssCompressor(new CssUrlReplacer(this));
+```
+
+Java (In Page)
+```java
+	@Override
+	public void renderHead(IHeaderResponse response){
+		response.render(CssHeaderItem.forReference(
+		new PackageResourceReference(this.getClass(), "myCss.css")));
+	}
+```
+
+CSS (myCss.css)
+<pre>
+body{
+	background-image:url('myImage.jpg');
+}
+</pre>
+
+Image myImage.jpg should be placed in the same package as the page and the URL of the background-image is replaced by a URL generated of PackageResourceReference of myImage.jpg.
