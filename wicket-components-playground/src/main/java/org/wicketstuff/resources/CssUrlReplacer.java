@@ -64,16 +64,18 @@ public class CssUrlReplacer implements ICssCompressor {
 				try {
 					Class<Page> pageClass = (Class<Page>) Class.forName(pageName);
 					String url = matcher.group(1);
-					URL urlResource = pageClass.getResource(url);
-					// If the resource is not found for a page skip it
-					if (urlResource != null) {
-						PackageResourceReference packageResourceReference = new PackageResourceReference(pageClass, url);
-						String replacedUrl = RequestCycle.get().urlFor(packageResourceReference, null).toString();
-						StringBuilder urlBuilder = new StringBuilder();
-						urlBuilder.append("url('");
-						urlBuilder.append(replacedUrl);
-						urlBuilder.append("')");
-						original = matcher.replaceFirst(urlBuilder.toString());
+					if(!url.contains("/")){
+						URL urlResource = pageClass.getResource(url);
+						// If the resource is not found for a page skip it
+						if (urlResource != null) {
+							PackageResourceReference packageResourceReference = new PackageResourceReference(pageClass, url);
+							String replacedUrl = RequestCycle.get().urlFor(packageResourceReference, null).toString();
+							StringBuilder urlBuilder = new StringBuilder();
+							urlBuilder.append("url('");
+							urlBuilder.append(replacedUrl);
+							urlBuilder.append("')");
+							original = matcher.replaceFirst(urlBuilder.toString());
+						}
 					}
 				} catch (Exception e) {
 					StringWriter stringWriter = this.printStack(e);
