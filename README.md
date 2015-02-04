@@ -383,7 +383,7 @@ Note: The URL is only replaced if it doesn't contain any kind of path syntax lik
 
 Java (In Applications init-Method):
 ```java
-	this.getResourceSettings().setCssCompressor(new CssUrlReplacementCompressor(this));
+	this.getResourceSettings().setCssCompressor(new CssUrlReplacer(this));
 ```
 
 Java (In Page)
