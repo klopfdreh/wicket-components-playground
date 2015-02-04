@@ -16,8 +16,6 @@
  */
 package org.apache.wicket.resource;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,7 +26,6 @@ import java.util.regex.Pattern;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
-import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.application.IComponentInitializationListener;
 import org.apache.wicket.core.util.lang.WicketObjects;
@@ -38,13 +35,13 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 
 /**
  * This compressor is used to replace url within css files with resources that belongs to their
- * corresponding page classes. The compress method is not compressing any content, but replacing the
+ * corresponding component classes. The compress method is not compressing any content, but replacing the
  * URLs with Wicket representatives.<br>
  * <br>
  * Usage:
  * 
  * <pre>
- * this.getResourceSettings().setCssCompressor(new CssUrlReplacer(this));
+ * this.getResourceSettings().setCssCompressor(new CssUrlReplacementCompressor(this));
  * </pre>
  * 
  * @since 6.20.0
@@ -54,16 +51,16 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 public class CssUrlReplacer implements ICssCompressor
 {
 
-	// Holds the names of pages
-	private final Map<String, String> pageNames = Collections.synchronizedMap(new LinkedHashMap<String, String>());
+	// Holds the names of components
+	private final Map<String, String> componentNames = Collections.synchronizedMap(new LinkedHashMap<String, String>());
 
 	// The pattern to find URLs in CSS resources
-	private static final Pattern urlPattern = Pattern.compile("url\\(['|\"]*(.*)['|\"]*\\)");
+	private static final Pattern urlPattern = Pattern.compile("url\\(['|\"](.*)['|\"]\\)");
 
 	public CssUrlReplacer(Application application)
 	{
 
-		// Create an instantiation listener which filters only pages.
+		// Create an instantiation listener to detect components
 		application.getComponentInitializationListeners().add(
 			new IComponentInitializationListener()
 			{
@@ -71,11 +68,8 @@ public class CssUrlReplacer implements ICssCompressor
 				@Override
 				public void onInitialize(Component component)
 				{
-					if (Page.class.isAssignableFrom(component.getClass()))
-					{
-						CssUrlReplacer.this.pageNames.put(component.getClass()
-							.getName(), component.getClass().getSimpleName());
-					}
+					CssUrlReplacer.this.componentNames.put(component.getClass().getName(),
+						component.getClass().getSimpleName());
 				}
 			});
 	}
@@ -90,21 +84,21 @@ public class CssUrlReplacer implements ICssCompressor
 		// Search for urls
 		while (matcher.find())
 		{
-			Collection<String> pageNames = this.pageNames.keySet();
-			for (String pageName : pageNames)
+			Collection<String> componentNames = this.componentNames.keySet();
+			for (String componentName : componentNames)
 			{
 				try
 				{
-					Class<Page> pageClass = WicketObjects.resolveClass(pageName);
+					Class<?> componentClass = WicketObjects.resolveClass(componentName);
 					String url = matcher.group(1);
 					if (!url.contains("/"))
 					{
-						URL urlResource = pageClass.getResource(url);
-						// If the resource is not found for a page skip it
+						URL urlResource = componentClass.getResource(url);
+						// If the resource is not found skip it
 						if (urlResource != null)
 						{
 							PackageResourceReference packageResourceReference = new PackageResourceReference(
-								pageClass, url);
+								componentClass, url);
 							String replacedUrl = RequestCycle.get()
 								.urlFor(packageResourceReference, null)
 								.toString();
@@ -118,27 +112,12 @@ public class CssUrlReplacer implements ICssCompressor
 				}
 				catch (Exception e)
 				{
-					StringWriter stringWriter = this.printStack(e);
-					throw new WicketRuntimeException(stringWriter.toString());
+					throw new WicketRuntimeException(
+						"A problem occurred during CSS url replacement.", e);
 				}
 			}
 
 		}
 		return original;
-	}
-
-	/**
-	 * Prints the stack trace to a print writer
-	 * 
-	 * @param exception
-	 *            the exception
-	 * @return the string writer containing the stack trace
-	 */
-	private StringWriter printStack(Exception exception)
-	{
-		StringWriter stringWriter = new StringWriter();
-		PrintWriter printWriter = new PrintWriter(stringWriter);
-		exception.printStackTrace(printWriter);
-		return stringWriter;
 	}
 }
