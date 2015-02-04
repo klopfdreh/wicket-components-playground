@@ -383,7 +383,7 @@ Note: The URL is only replaced if it doesn't contain any kind of path syntax lik
 
 Java (In Applications init-Method):
 ```java
-	this.getResourceSettings().setCssCompressor(new CssUrlReplacer(this));
+	this.getResourceSettings().setCssCompressor(new CssUrlReplacementCompressor(this));
 ```
 
 Java (In Page)
@@ -403,3 +403,7 @@ body{
 </pre>
 
 Image myImage.jpg should be placed in the same package as the page and the URL of the background-image is replaced by a URL generated of PackageResourceReference of myImage.jpg.
+
+Implementation in the Wicket core project requested:
+
+* https://issues.apache.org/jira/browse/WICKET-5827
