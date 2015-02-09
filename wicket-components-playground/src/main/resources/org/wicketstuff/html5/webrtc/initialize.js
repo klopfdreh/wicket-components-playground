@@ -46,6 +46,8 @@ $(function(){
 	        d.className = 'localvideo';
 	        d.id = 'container_' + webrtc.getDomId(peer);
 	        d.appendChild(video);
+	        
+	        // Creating the volume element for remote videos
 	        var vol = document.createElement('div');
 	        vol.id = 'volume_' + peer.id;
 	        vol.className = 'volumebar';
@@ -54,6 +56,7 @@ $(function(){
 	            video.style.height = video.videoHeight + 'px';
 	        };
 	        d.appendChild(vol);
+	        
 	        remotes.appendChild(d);
 	    }
 	});
