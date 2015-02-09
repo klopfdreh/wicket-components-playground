@@ -422,3 +422,6 @@ HTML:
 <pre>
 	&lt;img wicket:id="canvasImage" /&gt;
 </pre>
+
+Further information:
+http://www.html5rocks.com/en/tutorials/canvas/integrating/
