@@ -407,3 +407,17 @@ Image myImage.jpg should be placed in the same package as the component and the 
 Implementation in the Wicket core project requested:
 
 * https://issues.apache.org/jira/browse/WICKET-5827
+
+CanvasImage
+------------------
+
+The canvas image allows you to render the image content as base64 encoded content into the html page. (Example: src="data:image/jpeg;base64,......") The benefit is for example, that you could create HTML EMails without external image resources.
+
+Java:
+```java
+	add(new CanvasImage("canvasImage", new PackageResourceStream(this.getClass(), "myImage.jpg")));
+```
+HTML:
+<pre>
+	&lt;img wicket:id="canvasImage" /&gt;
+</pre>
