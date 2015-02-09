@@ -424,4 +424,4 @@ HTML:
 </pre>
 
 Further information:
-http://www.html5rocks.com/en/tutorials/canvas/integrating/
+* http://www.html5rocks.com/en/tutorials/canvas/integrating/
