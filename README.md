@@ -415,7 +415,8 @@ The canvas image allows you to render the image content as base64 encoded conten
 
 Java:
 ```java
-	add(new CanvasImage("canvasImage", new PackageResourceStream(this.getClass(), "myImage.jpg")));
+	add(new CanvasImage("canvasImage", 
+	new PackageResourceStream(this.getClass(), "myImage.jpg")));
 ```
 HTML:
 <pre>
