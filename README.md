@@ -372,7 +372,7 @@ Further information:
 * https://github.com/HenrikJoreteg/webrtc.js
 
 TODO:
-* Because of a little issue the remote volume visuals are not shown: https://github.com/HenrikJoreteg/SimpleWebRTC/issues/203 - have to update the libraries if fixed.
+* Because of a little issue the remote volume visuals are not shown: https://github.com/HenrikJoreteg/SimpleWebRTC/issues/203 - have to update the libraries if fixed. -- Fixed - that was a fast response of fippo less then 10 minutes - awesome!
 
 Special thanks to:
 * Jörn Zaefferer who helped me out with NodeJS. :-)
