@@ -361,11 +361,6 @@ Java:
 	this.add(webrtc);
 ```
 
-To change the look and positions of the videos you can do this via CSS. The classes are:
-- videocontainer - the container which holds the video and the volume bar
-- video - the video element in the videocontainer
-- volumebar - the volume bar
-
 HTML:
 <pre>
 	&lt;div class="videocontainer"&gt;
@@ -373,6 +368,11 @@ HTML:
 	&lt;/div&gt;
 	&lt;div wicket:id="webrtc"&gt;&lt;/div&gt;
 </pre>
+
+To change the look and positions of the videos you can do this via CSS. The classes are:
+- videocontainer - the container which holds the video and the volume bar
+- video - the video element in the videocontainer
+- volumebar - the volume bar
 
 Further information:
 * http://www.html5rocks.com/en/tutorials/webrtc/basics/
