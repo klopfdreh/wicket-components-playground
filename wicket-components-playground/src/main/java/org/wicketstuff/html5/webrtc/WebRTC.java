@@ -71,20 +71,11 @@ public abstract class WebRTC extends WebMarkupContainer
 	public void renderHead(IHeaderResponse response)
 	{
 		response.render(JavaScriptHeaderItem.forReference(JQueryResourceReference.get()));
-		if (debug != null && debug)
-		{
-			response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(
-				WebRTC.class, "simplewebrtc.bundle.js")));
-		}
-		else
-		{
-			response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(
-				WebRTC.class, "latest.js")));
-		}
+		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(
+			WebRTC.class, debug != null && debug ? "simplewebrtc.bundle.js" : "latest.js")));
 		String initializejs = new Scanner(WebRTC.class.getResourceAsStream("initialize.js")).useDelimiter(
 			"\\A")
 			.next();
-
 		initializejs = initializejs.replaceAll("%\\(markupid\\)", getMarkupId());
 		initializejs = initializejs.replaceAll("%\\(localvideoid\\)", getLocalVideoId());
 		initializejs = initializejs.replaceAll("%\\(roomname\\)", getRoomName());
