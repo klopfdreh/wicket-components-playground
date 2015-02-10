@@ -46,6 +46,12 @@ public abstract class WebRTC extends WebMarkupContainer
 
 	private Boolean volumeBars;
 
+	private Integer framesPerSeconds;
+
+	private Integer maxWidth;
+
+	private Integer maxHeight;
+
 	public WebRTC(String id)
 	{
 		super(id);
@@ -84,6 +90,10 @@ public abstract class WebRTC extends WebMarkupContainer
 		initializejs = initializejs.replaceAll("%\\(roomname\\)", getRoomName());
 		initializejs = initializejs.replaceAll("%\\(socketiourl\\)", getSocketIOUrl());
 		initializejs = initializejs.replaceAll("%\\(volumebars\\)", getVolumeBars().toString());
+		initializejs = initializejs.replaceAll("%\\(framesperseconds\\)",
+			getFramesPerSeconds().toString());
+		initializejs = initializejs.replaceAll("%\\(maxwidth\\)", getMaxWidth().toString());
+		initializejs = initializejs.replaceAll("%\\(maxheight\\)", getMaxHeight().toString());
 
 		response.render(JavaScriptReferenceHeaderItem.forScript(initializejs, getMarkupId() +
 			"script"));
@@ -157,6 +167,69 @@ public abstract class WebRTC extends WebMarkupContainer
 	public void setVolumeBars(Boolean volumeBars)
 	{
 		this.volumeBars = volumeBars;
+	}
+
+	/**
+	 * Gets the frames per seconds which are going to be used for the videos
+	 * 
+	 * @return the frames per seconds
+	 */
+	public Integer getFramesPerSeconds()
+	{
+		return framesPerSeconds != null ? framesPerSeconds : 10;
+	}
+
+	/**
+	 * Sets the frames per seconds which are going to be used for the videos
+	 * 
+	 * @param framesPerSeconds
+	 *            the frames per seconds as short
+	 */
+	public void setFramesPerSeconds(Integer framesPerSeconds)
+	{
+		this.framesPerSeconds = framesPerSeconds;
+	}
+
+	/**
+	 * Gets the max width of the videos - if the width is smaller less band width is used
+	 * 
+	 * @return the max width of the videos
+	 */
+	public Integer getMaxWidth()
+	{
+		return maxWidth != null ? maxWidth : 320;
+	}
+
+	/**
+	 * Sets the max width of the videos - if the width is smaller less band width is used
+	 * 
+	 * @param maxWidth
+	 *            the max width the videos should be
+	 */
+	public void setMaxWidth(Integer maxWidth)
+	{
+		this.maxWidth = maxWidth;
+	}
+
+	/**
+	 * Gets the max height of the videos - if the height is smaller less band width is used
+	 * 
+	 * @return the max height of the videos
+	 */
+	public Integer getMaxHeight()
+	{
+		return maxHeight != null ? maxHeight : 240;
+	}
+
+	/**
+	 * Sets the max height of the videos - if the height is smaller less band width is used
+	 * 
+	 * @param maxHeight
+	 *            the max height the videos should be
+	 */
+	public void setMaxHeight(Integer maxHeight)
+	{
+		this.maxHeight = maxHeight;
 	}
 
 }

@@ -355,12 +355,15 @@ Java:
 	};
 	webrtc.setVolumeBars(false);
 	webrtc.setDebug(false);
+	webrtc.setFramesPerSeconds(10);
+	webrtc.setMaxWidth(320);
+	webrtc.setMaxHeight(240);
 	this.add(webrtc);
 ```
 
 HTML:
 <pre>
-	&lt;div class="localvideo"&gt;
+	&lt;div class="videocontainer"&gt;
 		&lt;video wicket:id="video" /&gt;
 	&lt;/div&gt;
 	&lt;div wicket:id="webrtc"&gt;&lt;/div&gt;

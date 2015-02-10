@@ -8,6 +8,16 @@ $(function(){
 	    autoRequestMedia: true,
 	    detectSpeakingEvents: true,
 	    autoAdjustMic: false,
+	    media: {
+	    	video: {
+		    	mandatory: {
+			    	maxFrameRate: %(framesperseconds),
+			    	maxWidth: %(maxwidth),
+			    	maxHeight: %(maxheight)
+		    	}
+	    	},
+	    	audio: true
+	    },
 	    // url for the socket.io server
 	    url: '%(socketiourl)',
 	    socketio: { 'force new connection':true }
@@ -52,7 +62,7 @@ $(function(){
 		var remotes = document.getElementById('%(markupid)');
 	    if (remotes) {
 	        var d = document.createElement('div');
-	        d.className = 'localvideo';
+	        d.className = 'videocontainer';
 	        d.id = 'container_' + webrtc.getDomId(peer);
 	        d.appendChild(video);
 	        
