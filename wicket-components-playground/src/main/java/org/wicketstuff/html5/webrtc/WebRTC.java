@@ -44,18 +44,20 @@ public abstract class WebRTC extends WebMarkupContainer
 
 	private Boolean debug;
 
+	private Boolean volumeBars;
+
 	public WebRTC(String id)
 	{
 		super(id);
-		this.setOutputMarkupId(true);
-		this.setOutputMarkupPlaceholderTag(true);
+		setOutputMarkupId(true);
+		setOutputMarkupPlaceholderTag(true);
 	}
 
 	public WebRTC(String id, IModel<?> model)
 	{
 		super(id, model);
-		this.setOutputMarkupId(true);
-		this.setOutputMarkupPlaceholderTag(true);
+		setOutputMarkupId(true);
+		setOutputMarkupPlaceholderTag(true);
 	}
 
 	@SuppressWarnings("resource")
@@ -76,8 +78,13 @@ public abstract class WebRTC extends WebMarkupContainer
 		String initializejs = new Scanner(WebRTC.class.getResourceAsStream("initialize.js")).useDelimiter(
 			"\\A")
 			.next();
-		initializejs = String.format(initializejs, getLocalVideoId(), getSocketIOUrl(),
-			getRoomName(), getMarkupId(), getMarkupId());
+
+		initializejs = initializejs.replaceAll("%\\(markupid\\)", getMarkupId());
+		initializejs = initializejs.replaceAll("%\\(localvideoid\\)", getLocalVideoId());
+		initializejs = initializejs.replaceAll("%\\(roomname\\)", getRoomName());
+		initializejs = initializejs.replaceAll("%\\(socketiourl\\)", getSocketIOUrl());
+		initializejs = initializejs.replaceAll("%\\(volumebars\\)", getVolumeBars().toString());
+
 		response.render(JavaScriptReferenceHeaderItem.forScript(initializejs, getMarkupId() +
 			"script"));
 		response.render(CssReferenceHeaderItem.forReference(new PackageResourceReference(
@@ -129,6 +136,27 @@ public abstract class WebRTC extends WebMarkupContainer
 	public void setDebug(Boolean debug)
 	{
 		this.debug = debug;
+	}
+
+	/**
+	 * If the volume bars are enabled or disabled
+	 * 
+	 * @return if the volume bars are enabled or disabled
+	 */
+	public Boolean getVolumeBars()
+	{
+		return volumeBars != null ? volumeBars : true;
+	}
+
+	/**
+	 * Sets the volume bars to be enabled or disabled
+	 * 
+	 * @param volumeBars
+	 *            if the volume bars are enabled or disabled
+	 */
+	public void setVolumeBars(Boolean volumeBars)
+	{
+		this.volumeBars = volumeBars;
 	}
 
 }
