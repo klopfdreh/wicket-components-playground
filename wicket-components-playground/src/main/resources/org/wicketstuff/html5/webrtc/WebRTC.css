@@ -1,7 +1,7 @@
 .videocontainer {
      position: relative;
-     width: 200px;
-     height: 150px;
+     width: %(maxwidth)px;
+     height: %(maxheight)px;
  }
  .videocontainer video {
      position: absolute;

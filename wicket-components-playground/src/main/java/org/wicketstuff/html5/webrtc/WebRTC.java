@@ -23,8 +23,10 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.media.video.Video;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryResourceReference;
 
 /**
@@ -70,6 +72,7 @@ public abstract class WebRTC extends WebMarkupContainer
 	@Override
 	public void renderHead(IHeaderResponse response)
 	{
+		Video localVideo = configureVideo();
 		response.render(JavaScriptHeaderItem.forReference(JQueryResourceReference.get()));
 		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(
 			WebRTC.class, debug != null && debug ? "simplewebrtc.bundle.js" : "latest.js")));
@@ -77,7 +80,7 @@ public abstract class WebRTC extends WebMarkupContainer
 			"\\A")
 			.next();
 		initializejs = initializejs.replaceAll("%\\(markupid\\)", getMarkupId());
-		initializejs = initializejs.replaceAll("%\\(localvideoid\\)", getLocalVideoId());
+		initializejs = initializejs.replaceAll("%\\(localvideoid\\)", localVideo.getMarkupId());
 		initializejs = initializejs.replaceAll("%\\(roomname\\)", getRoomName());
 		initializejs = initializejs.replaceAll("%\\(socketiourl\\)", getSocketIOUrl());
 		initializejs = initializejs.replaceAll("%\\(volumebars\\)", getVolumeBars().toString());
@@ -88,8 +91,36 @@ public abstract class WebRTC extends WebMarkupContainer
 
 		response.render(JavaScriptReferenceHeaderItem.forScript(initializejs, getMarkupId() +
 			"script"));
-		response.render(CssReferenceHeaderItem.forReference(new PackageResourceReference(
-			WebRTC.class, "WebRTC.css")));
+		String css = new Scanner(WebRTC.class.getResourceAsStream("WebRTC.css")).useDelimiter("\\A")
+			.next();
+		css = css.replaceAll("%\\(maxwidth\\)", getMaxWidth().toString());
+		css = css.replaceAll("%\\(maxheight\\)", getMaxHeight().toString());
+		response.render(CssReferenceHeaderItem.forCSS(css, getMarkupId() + "css"));
+	}
+
+	/**
+	 * Configures the given video for web rtc. If the video and mic are rejected for usage a dummy
+	 * picture is going to be shown.
+	 * 
+	 * @return the configured video
+	 */
+	private Video configureVideo()
+	{
+		Video localVideo = getLocalVideo();
+		localVideo.setOutputMarkupId(true);
+		localVideo.setPoster(getNoVideoResourceReference());
+		return localVideo;
+	}
+
+	/**
+	 * Gets the resource reference which is going to be shown if the access to the mic and the cam
+	 * is not allowed by the user.
+	 * 
+	 * @return the resource reference to be used if no access to mic and the cam is not allowed
+	 */
+	protected ResourceReference getNoVideoResourceReference()
+	{
+		return new PackageResourceReference(WebRTC.class, "novideo.gif");
 	}
 
 	/**
@@ -98,7 +129,7 @@ public abstract class WebRTC extends WebMarkupContainer
 	 * 
 	 * @return the id of the local video
 	 */
-	public abstract String getLocalVideoId();
+	public abstract Video getLocalVideo();
 
 	/**
 	 * Gets the room name to which the users are joining
