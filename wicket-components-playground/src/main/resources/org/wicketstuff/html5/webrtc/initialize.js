@@ -59,7 +59,7 @@ $(function(){
 	
 	// If a new user joins another video element is added and a volume bar is created for the video element
 	webrtc.on('videoAdded', function (video, peer) {
-		video.style.backgroundImage="url('%(poster)')";
+		video.poster="%(poster)";
 		var remotes = document.getElementById('%(markupid)');
 	    if (remotes) {
 	        var d = document.createElement('div');
