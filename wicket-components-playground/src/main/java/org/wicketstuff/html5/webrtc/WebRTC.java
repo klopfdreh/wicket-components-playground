@@ -25,6 +25,7 @@ import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.media.video.Video;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryResourceReference;
@@ -88,6 +89,8 @@ public abstract class WebRTC extends WebMarkupContainer
 			getFramesPerSeconds().toString());
 		initializejs = initializejs.replaceAll("%\\(maxwidth\\)", getMaxWidth().toString());
 		initializejs = initializejs.replaceAll("%\\(maxheight\\)", getMaxHeight().toString());
+		initializejs = initializejs.replaceAll("%\\(poster\\)",
+			RequestCycle.get().urlFor(getNoVideoResourceReference(), null).toString());
 
 		response.render(JavaScriptReferenceHeaderItem.forScript(initializejs, getMarkupId() +
 			"script"));
