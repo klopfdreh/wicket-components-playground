@@ -120,7 +120,7 @@ public class ReplacingResourceModel extends AbstractReadOnlyModel<String> implem
 
 	}
 
-	// The pattern to find URLs in CSS resources
+	// The pattern to find keys in the given key value resources
 	private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\$\\{(.*)\\}");
 
 	private String getReplacedResourceString(Component component)
