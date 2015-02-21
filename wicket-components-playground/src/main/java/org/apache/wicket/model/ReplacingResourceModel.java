@@ -24,7 +24,8 @@ import org.apache.wicket.Component;
 
 /**
  * The ReplacingResourceModel is used to replaced other keys marked up like ${key} with their
- * corresponding values in the given key:<br>
+ * corresponding values in the given key.The replacing mechanism also uses the default way to get
+ * the localized String.<br>
  * <br>
  * 
  * Example:<br>
