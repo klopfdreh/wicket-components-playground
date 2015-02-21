@@ -123,6 +123,13 @@ public class ReplacingResourceModel extends AbstractReadOnlyModel<String> implem
 	// The pattern to find keys in the given key value
 	private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\$\\{(.*?)\\}");
 
+	/**
+	 * Replaces all resource keys found in the given resourceKey with their localized values
+	 * 
+	 * @param component
+	 *            the component to look for the resourceKey and all relating resource keys
+	 * @return the localized String
+	 */
 	private String getReplacedResourceString(Component component)
 	{
 		String resourceKeyValue = Application.get()
