@@ -23,7 +23,24 @@ import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 
 /**
- * The ReplacingResourceModel
+ * The ReplacingResourceModel is used to replaced other keys marked up like ${key} with their
+ * corresponding values in the given key:<br>
+ * <br>
+ * 
+ * Example:<br>
+ * <br>
+ * 
+ * <pre>
+ * key1=value of key1
+ * key2=value of key2 contains ${key1}
+ * 
+ * Label label = new Label("label",new ReplacingResourceModel("key2"));
+ * 
+ * &lt;span wicket:id="label"&gt;&lt;span&gt;
+ * 
+ * Output: value of key2 contains value of key1
+ * </pre>
+ * 
  * 
  * @author Tobias Soloschenko
  */
