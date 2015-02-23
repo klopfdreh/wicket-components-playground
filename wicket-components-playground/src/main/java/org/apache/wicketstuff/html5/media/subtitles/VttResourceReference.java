@@ -15,12 +15,12 @@ import org.apache.wicket.util.io.Streams;
  * 
  * @author Tobias Soloschenko
  */
-public abstract class VTTResourceReference extends ResourceReference
+public abstract class VttResourceReference extends ResourceReference
 {
 
 	private static final long serialVersionUID = 1L;
 
-	public VTTResourceReference(String name)
+	public VttResourceReference(String name)
 	{
 		super(name);
 	}
