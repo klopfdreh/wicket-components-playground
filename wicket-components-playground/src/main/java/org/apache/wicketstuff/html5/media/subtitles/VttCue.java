@@ -326,7 +326,7 @@ public class VttCue {
 			builder.append(" position:");
 			builder.append(getPosition());
 		}
-		builder.append(System.getProperty("line.separator"));
+		builder.append("\n");
 
 		if (getVoiceSpan() != null || getRegion() != null) {
 			builder.append("<v");
