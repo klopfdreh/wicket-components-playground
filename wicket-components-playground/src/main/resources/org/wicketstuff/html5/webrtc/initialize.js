@@ -1,4 +1,16 @@
 $(function(){
+	// creates the volume bar
+	function createVolumeBar(id){
+		var volumebar = document.createElement('meter');
+		volumebar.id = id;
+		volumebar.className = 'volumebar';
+		volumebar.min = -45;
+		volumebar.max = -20;
+		volumebar.low = -40;
+		volumebar.high = -25;
+		return volumebar;
+	}
+	
 	var webrtc = new SimpleWebRTC({
 	    // the id/element dom element that will hold "our" video
 	    localVideoEl: '%(localvideoid)',
@@ -25,12 +37,15 @@ $(function(){
 	
 	// show local volume bar
 	if(%(volumebars)){
-		var localvolumebar = document.createElement('div');
-		localvolumebar.id="localvolume";
-		localvolumebar.className="volumebar";
 		var localvideo = document.getElementById('%(localvideoid)');
-		localvideo.parentElement.appendChild(localvolumebar);
+		localvideo.parentElement.appendChild(createVolumeBar('localvolume'));	
 	}
+	
+    // we did not get access to the camera
+    webrtc.on('localMediaError', function (err) {
+    	document.getElementById('localvolume').style.display='none';
+    });
+
 	
 	//we have to wait until it's ready
 	webrtc.on('readyToCall', function () {
@@ -41,45 +56,35 @@ $(function(){
 	// Shows the volume bar in the video elements
 	function showVolume(el, volume) {
 	    if (!el) return;
-	    if (volume < -45) { // vary between -45 and -20
-	        el.style.height = '0px';
-	    } else if (volume > -20) {
-	        el.style.height = '100%';
-	    } else {
-	        el.style.height = '' + Math.floor((volume + 100) * 100 / 25 - 220) + '%';
-	    }
+		if (volume < -45) volume = -45; // -45 to -20 is
+		if (volume > -20) volume = -20; // a good range
+		el.value = volume;
 	}
-	
-	// If a message is received the volume is going to be refreshed
-	webrtc.on('channelMessage', function (peer, label, data) {
-	    if (data.type == 'volume') {
-	        showVolume(document.getElementById('volume_' + peer.id), data.volume);
-	    }
-	});
 	
 	// If a new user joins another video element is added and a volume bar is created for the video element
 	webrtc.on('videoAdded', function (video, peer) {
 		video.poster="%(poster)";
 		var remotes = document.getElementById('%(markupid)');
 	    if (remotes) {
-	        var d = document.createElement('div');
-	        d.className = 'videocontainer';
-	        d.id = 'container_' + webrtc.getDomId(peer);
-	        d.appendChild(video);
+	        var remoteContainer = document.createElement('div');
+	        remoteContainer.className = 'videocontainer';
+	        remoteContainer.id = 'container_' + webrtc.getDomId(peer);
+	        remoteContainer.appendChild(video);
 	        
+			// suppress context menu
+			video.oncontextmenu = function () { return false; };
+
+			// resize the video on click
+			video.onclick = function () {
+				remoteContainer.style.width = video.videoWidth + 'px';
+				remoteContainer.style.height = video.videoHeight + 'px';
+			};			
+
+			// show volume bars if requested
 	        if(%(volumebars)){
-		        // Creating the volume element for remote videos
-		        var vol = document.createElement('div');
-		        vol.id = 'volume_' + peer.id;
-		        vol.className = 'volumebar';
-		        video.onclick = function () {
-		            video.style.width = video.videoWidth + 'px';
-		            video.style.height = video.videoHeight + 'px';
-		        };
-		        d.appendChild(vol);
+				remoteContainer.appendChild(createVolumeBar('volume_' + peer.id));
 	        }
-	        
-	        remotes.appendChild(d);
+	        remotes.appendChild(remoteContainer);
 	    }
 	});
 	
@@ -97,4 +102,8 @@ $(function(){
 	    showVolume(document.getElementById('localvolume'), volume);
 	});
 
+	// remote volume has changed
+	webrtc.on('remoteVolumeChange', function (peer, volume) {
+		showVolume(document.getElementById('volume_' + peer.id), volume);
+	});
 });
