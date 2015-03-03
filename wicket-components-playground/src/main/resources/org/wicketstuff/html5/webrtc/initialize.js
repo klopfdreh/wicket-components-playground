@@ -43,7 +43,11 @@ $(function(){
 	
     // we did not get access to the camera
     webrtc.on('localMediaError', function (err) {
-    	document.getElementById('localvolume').style.display='none';
+    	if('%(errorurl)' === ''){    		
+    		document.getElementById('localvolume').style.display='none';
+    	}else{
+    		window.location.href='%(errorurl)';
+    	}
     });
 
 	

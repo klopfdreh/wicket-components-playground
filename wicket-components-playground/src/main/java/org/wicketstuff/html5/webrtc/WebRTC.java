@@ -18,6 +18,7 @@ package org.wicketstuff.html5.webrtc;
 
 import java.util.Scanner;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -91,6 +92,8 @@ public abstract class WebRTC extends WebMarkupContainer
 		initializejs = initializejs.replaceAll("%\\(maxheight\\)", getMaxHeight().toString());
 		initializejs = initializejs.replaceAll("%\\(poster\\)",
 			RequestCycle.get().urlFor(getNoVideoResourceReference(), null).toString());
+		initializejs = initializejs.replaceAll("%\\(errorurl\\)", (getErrorPage() != null
+			? RequestCycle.get().urlFor(getErrorPage(), null) : "").toString());
 
 		response.render(JavaScriptReferenceHeaderItem.forScript(initializejs, getMarkupId() +
 			"script"));
@@ -255,6 +258,18 @@ public abstract class WebRTC extends WebMarkupContainer
 	public void setMaxHeight(Integer maxHeight)
 	{
 		this.maxHeight = maxHeight;
+	}
+
+	/**
+	 * Override this to provide an error page if video / audio is not available. If only audio is
+	 * available getNoVideoResourceReference() is called and the image received by this method is
+	 * shown.
+	 * 
+	 * @return the page if video / audio is not available
+	 */
+	public Class<? extends Page> getErrorPage()
+	{
+		return null;
 	}
 
 }
