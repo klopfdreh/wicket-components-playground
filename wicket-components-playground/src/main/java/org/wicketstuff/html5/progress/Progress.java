@@ -17,7 +17,7 @@ public abstract class Progress extends WebComponent
 
 	private AtomicInteger value = new AtomicInteger(0);
 
-	private AtomicInteger max = new AtomicInteger(1);
+	private AtomicInteger max = new AtomicInteger(100);
 
 	private Duration duration;
 
