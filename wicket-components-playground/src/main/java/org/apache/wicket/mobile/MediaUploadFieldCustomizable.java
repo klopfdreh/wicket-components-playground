@@ -29,7 +29,8 @@ public class MediaUploadFieldCustomizable extends MediaUploadField
 		this(id, null, type);
 	}
 
-	public MediaUploadFieldCustomizable(String id, IModel<? extends List<FileUpload>> model, Type type)
+	public MediaUploadFieldCustomizable(String id, IModel<? extends List<FileUpload>> model,
+		Type type)
 	{
 		super(id, model, type);
 	}
@@ -75,13 +76,16 @@ public class MediaUploadFieldCustomizable extends MediaUploadField
 
 
 				// css
-				cssStream = MediaUploadField.class.getResourceAsStream(this.getClass()
-					.getSimpleName() + ".css");
-				String css = IOUtils.toString(cssStream);
-				css = css.replaceAll("%\\(mediauploadfieldid\\)", getMarkupId());
-				css = css.replaceAll("%\\(mediauploadfieldlabelid\\)",
-					formComponentLabel.getMarkupId());
-				response.render(CssHeaderItem.forCSS(css, "css_" + getMarkupId()));
+				if (formComponentLabel != null)
+				{
+					cssStream = MediaUploadField.class.getResourceAsStream(this.getClass()
+						.getSimpleName() + ".css");
+					String css = IOUtils.toString(cssStream);
+					css = css.replaceAll("%\\(mediauploadfieldid\\)", getMarkupId());
+					css = css.replaceAll("%\\(mediauploadfieldlabelid\\)",
+						formComponentLabel.getMarkupId());
+					response.render(CssHeaderItem.forCSS(css, "css_" + getMarkupId()));
+				}
 			}
 			catch (IOException ioe)
 			{
