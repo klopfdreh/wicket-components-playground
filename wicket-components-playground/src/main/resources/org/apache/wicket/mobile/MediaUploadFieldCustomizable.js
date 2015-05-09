@@ -3,7 +3,8 @@ function readURL(input, image, img, maxHeight, maxWidth) {
 		var reader = new FileReader();
 		reader.onload = function(e) {
 			img.src = e.target.result;
-			img.onload = function(){
+			image.css("display:none; height:0px; width:0px;")
+			image.load(function(){
 		        var ratio = 0;  // Used for aspect ratio
 		        var width = this.naturalWidth;    // Current image width
 		        var height = this.naturalHeight;  // Current image height
@@ -33,17 +34,23 @@ function readURL(input, image, img, maxHeight, maxWidth) {
 		        if(height < maxHeight){
 		        	$(this).css("height", height);
 		        }
-			};
+		        image.css("display:visible;")
+			});
 		}
 		reader.readAsDataURL(input.files[0]);
 	}
 }
 $(function() {
 	var image = $('#%(imageid)');
-	var img = $('#%(imageid)').get(0);
-	var maxHeight = img.height;
-	var maxWidth = img.width;
-	$("#%(mediauploadfieldid)").change(function() {
-		readURL(this, image, img, maxHeight, maxWidth);
+	var img = image.get(0);
+	var %(imageid)_space = {};
+	image.load(function(){
+		if(!%(imageid)_space.height){
+			%(imageid)_space.height = img.height;
+			%(imageid)_space.width = img.width;
+		}
+		$("#%(mediauploadfieldid)").change(function() {
+			readURL(this, image, img, %(imageid)_space.height, %(imageid)_space.width);
+		});
 	});
 });
