@@ -1,9 +1,26 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 function readURL(input, image, img, maxHeight, maxWidth) {
 	if (input.files && input.files[0]) {
+		image.css({
+			"visibility":"hidden"
+		});
 		var reader = new FileReader();
 		reader.onload = function(e) {
-			img.src = e.target.result;
-			image.css("display:none; height:0px; width:0px;")
 			image.load(function(){
 		        var ratio = 0;  // Used for aspect ratio
 		        var width = this.naturalWidth;    // Current image width
@@ -34,10 +51,13 @@ function readURL(input, image, img, maxHeight, maxWidth) {
 		        if(height < maxHeight){
 		        	$(this).css("height", height);
 		        }
-		        image.css("display:visible;")
 			});
+			img.src = e.target.result;
 		}
 		reader.readAsDataURL(input.files[0]);
+		image.css({
+			"visibility":"visible"
+		});
 	}
 }
 $(function() {
