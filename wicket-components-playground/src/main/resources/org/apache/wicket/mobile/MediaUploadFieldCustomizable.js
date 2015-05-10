@@ -16,21 +16,27 @@
  */
 function readURL(input, image, img, maxHeight, maxWidth) {
 	if (input.files && input.files[0]) {
-		image.css({
-			"visibility":"hidden"
-		});
+				
+		// Initialize the reader
 		var reader = new FileReader();
+		
+		// Starts to load
 		reader.onload = function(e) {
 			image.load(function(){
 		        var ratio = 0;  // Used for aspect ratio
 		        var width = this.naturalWidth;    // Current image width
 		        var height = this.naturalHeight;  // Current image height
+		        
+		        var scaledHeight;
+		        var scaledWidth;
 
 		        // Check if the current width is larger than the max
 		        if(width > maxWidth){
 		            ratio = maxWidth / width;   // get ratio for scaling image
-		            $(this).css("width", maxWidth); // Set new width
-		            $(this).css("height", height * ratio);  // Scale height based on ratio
+		            // Scale height based on ratio
+		            scaledHeight = height * ratio
+		            // Set new width
+		            scaledWidth = maxWidth
 		            height = height * ratio;    // Reset height to match scaled image
 		            width = width * ratio;    // Reset width to match scaled image
 		        }
@@ -38,39 +44,58 @@ function readURL(input, image, img, maxHeight, maxWidth) {
 		        // Check if current height is larger than max
 		        if(height > maxHeight){
 		            ratio = maxHeight / height; // get ratio for scaling image
-		            $(this).css("height", maxHeight);   // Set new height
-		            $(this).css("width", width * ratio);    // Scale width based on ratio
+		            // Set new height
+		            scaledHeight = maxHeight
+		            // Scale width based on ratio
+		            scaledWidth = width * ratio
 		            width = width * ratio;    // Reset width to match scaled image
 		            height = height * ratio;    // Reset height to match scaled image
 		        }
 		        
 		        // If the image is smaller - shrink it.
 		        if(width < maxWidth){
-		        	$(this).css("width", width);
+		            scaledWidth = width
 		        }
 		        if(height < maxHeight){
-		        	$(this).css("height", height);
+		            scaledHeight = height
 		        }
+				
+		        // Adjust the width / height
+				image.css("height", scaledHeight);
+				image.css("width", scaledWidth);
+				
+				// Set image to be visible
+				image.css({
+					"visibility":"visible"
+				});
 			});
-			img.src = e.target.result;
+		}
+		
+		// Finished loading
+		reader.onloadend = function(e){
+			if (e.target.readyState == FileReader.DONE) {
+				// Set the image to be invisible (no flickering)
+				image.css({
+					"visibility":"hidden"
+				});
+				img.src = e.target.result;
+			}
 		}
 		reader.readAsDataURL(input.files[0]);
-		image.css({
-			"visibility":"visible"
-		});
 	}
 }
 $(function() {
 	var image = $('#%(imageid)');
 	var img = image.get(0);
-	var %(imageid)_space = {};
 	image.load(function(){
-		if(!%(imageid)_space.height){
-			%(imageid)_space.height = img.height;
-			%(imageid)_space.width = img.width;
+		if(!image.data("resize_dimensions")){
+			image.data("resize_dimensions",{
+				height:img.height, 
+				width:img.width
+			});
 		}
 		$("#%(mediauploadfieldid)").change(function() {
-			readURL(this, image, img, %(imageid)_space.height, %(imageid)_space.width);
+			readURL(this, image, img, image.data("resize_dimensions").height, image.data("resize_dimensions").width);
 		});
 	});
 });
