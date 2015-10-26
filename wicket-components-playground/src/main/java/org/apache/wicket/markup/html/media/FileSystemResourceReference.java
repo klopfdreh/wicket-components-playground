@@ -34,7 +34,9 @@ import org.apache.wicket.request.resource.ResourceReference;
  * To implement a mime type detection refer to the documentation of
  * {@link java.nio.file.Files#probeContentType(Path)} and provide an implementation for
  * java.nio.file.spi.FileTypeDetector in the META-INF/services folder for jars or in the
- * /WEB-INF/classes/META-INF/services folder for webapps
+ * /WEB-INF/classes/META-INF/services folder for webapps<br>
+ * <br>
+ * You can also override {@link #getMimeType()} to provide an inline mime type detection.
  * 
  * @author Tobias Soloschenko
  */
