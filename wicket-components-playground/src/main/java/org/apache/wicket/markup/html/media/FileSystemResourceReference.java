@@ -49,6 +49,20 @@ public class FileSystemResourceReference extends ResourceReference
 	/**
 	 * Creates a file system resource reference based on the given path
 	 * 
+	 * @param name
+	 *            the name of the resource reference to expose data
+	 * @param path
+	 *            the path to create the resource reference
+	 */
+	public FileSystemResourceReference(String name, Path path)
+	{
+		super(name);
+		this.path = path;
+	}
+
+	/**
+	 * Creates a file system resource reference based on the given path
+	 * 
 	 * @param path
 	 *            the path to create the resource reference (the name is used to expose the data)
 	 */
