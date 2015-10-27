@@ -17,26 +17,22 @@
 package org.apache.wicket.markup.html.media;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
 
-import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.resource.AbstractResource;
 import org.apache.wicket.request.resource.IResource;
-import org.apache.wicket.request.resource.PartWriterCallback;
 import org.apache.wicket.request.resource.ResourceReference;
 
 /**
- * This resource reference is used to provide content based on Java NIO FileSystem API.<br>
+ * This resource reference is used to provide a reference to a resource based on Java NIO FileSystem
+ * API.<br>
  * <br>
  * To implement a mime type detection refer to the documentation of
  * {@link java.nio.file.Files#probeContentType(Path)} and provide an implementation for
  * java.nio.file.spi.FileTypeDetector in the META-INF/services folder for jars or in the
  * /WEB-INF/classes/META-INF/services folder for webapps<br>
  * <br>
- * You can also override {@link #getMimeType()} to provide an inline mime type detection.
+ * You can optionally override {@link #getMimeType()} to provide an inline mime type detection,
+ * which is preferred to the default detection.
  * 
  * @author Tobias Soloschenko
  */
@@ -72,47 +68,14 @@ public class FileSystemResourceReference extends ResourceReference
 		this.path = path;
 	}
 
+	/**
+	 * Creates a new {@link org.apache.wicket.markup.html.media.FileSystemResource} and applies the
+	 * path to it.
+	 */
 	@Override
 	public IResource getResource()
 	{
-		return new FileSystemResource(path);
-	}
-
-	private class FileSystemResource extends AbstractResource
-	{
-		private static final long serialVersionUID = 1L;
-
-		private Path path;
-
-		public FileSystemResource(Path path)
-		{
-			this.path = path;
-		}
-
-		@Override
-		protected ResourceResponse newResourceResponse(Attributes attributes)
-		{
-			try
-			{
-				long size = Files.readAttributes(path, BasicFileAttributes.class).size();
-				ResourceResponse resourceResponse = new ResourceResponse();
-				resourceResponse.setContentType(getMimeType() != null ? getMimeType()
-					: Files.probeContentType(path));
-				resourceResponse.setAcceptRange(ContentRangeType.BYTES);
-				resourceResponse.setContentLength(size);
-				RequestCycle cycle = RequestCycle.get();
-				Long startbyte = cycle.getMetaData(CONTENT_RANGE_STARTBYTE);
-				Long endbyte = cycle.getMetaData(CONTENT_RANGE_ENDBYTE);
-				resourceResponse.setWriteCallback(new PartWriterCallback(
-					Files.newInputStream(path), size, startbyte, endbyte));
-				return resourceResponse;
-			}
-			catch (IOException e)
-			{
-				throw new WicketRuntimeException(
-					"An error occured while processing the media resource response", e);
-			}
-		}
+		return getFileSystemResource();
 	}
 
 	/**
@@ -123,5 +86,26 @@ public class FileSystemResourceReference extends ResourceReference
 	protected String getMimeType()
 	{
 		return null;
+	}
+
+	/**
+	 * Gets the file system resource to be used for the resource reference
+	 * 
+	 * @return the file system resource to be used for the resource reference
+	 */
+	protected FileSystemResource getFileSystemResource()
+	{
+		FileSystemResource fileSystemResource = new FileSystemResource(path)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected String getMimeType() throws IOException
+			{
+				String mimeType = FileSystemResourceReference.this.getMimeType();
+				return mimeType != null ? mimeType : super.getMimeType();
+			}
+		};
+		return fileSystemResource;
 	}
 }
