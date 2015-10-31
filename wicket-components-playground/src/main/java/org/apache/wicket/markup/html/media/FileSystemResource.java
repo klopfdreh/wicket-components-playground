@@ -60,6 +60,7 @@ public class FileSystemResource extends AbstractResource
 	{
 		try
 		{
+			
 			long size = getSize(path);
 			ResourceResponse resourceResponse = new ResourceResponse();
 			resourceResponse.setContentType(getMimeType() != null ? getMimeType()

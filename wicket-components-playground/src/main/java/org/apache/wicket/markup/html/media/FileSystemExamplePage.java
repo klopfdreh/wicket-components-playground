@@ -1,6 +1,8 @@
 package org.apache.wicket.markup.html.media;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -12,9 +14,10 @@ public class FileSystemExamplePage extends WebPage
 
 	private static final long serialVersionUID = 1L;
 	
-	public FileSystemExamplePage()
+	public FileSystemExamplePage() throws IOException, URISyntaxException
 	{
-		Path path = Paths.get(URI.create("file:///Users/klopfdreh/Documents/Eclipse%20Workspace/myproject/src/main/java/com/mycompany/video1.mp4"));
+//		Path path = FileSystemResourceReference.getPath(URI.create("file:///Users/klopfdreh/Documents/Eclipse%20Workspace/myproject/src/main/java/com/mycompany/video1.mp4"));
+		Path path = FileSystemResourceReference.getPath(URI.create("jar:file:///Users/klopfdreh/Documents/Eclipse%20Workspace/myproject/src/main/java/com/mycompany/test.zip!/test/video1.mp4"));
 		add(new Video("video", new FileSystemResourceReference(path){
 			private static final long serialVersionUID = 1L;
 

@@ -17,7 +17,14 @@
 package org.apache.wicket.markup.html.media;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
@@ -41,6 +48,8 @@ public class FileSystemResourceReference extends ResourceReference
 	private static final long serialVersionUID = 1L;
 
 	private Path path;
+
+	private static Map<URI, FileSystem> fileSystemURIs = new HashMap<URI, FileSystem>();
 
 	/**
 	 * Creates a file system resource reference based on the given path
@@ -107,5 +116,37 @@ public class FileSystemResourceReference extends ResourceReference
 			}
 		};
 		return fileSystemResource;
+	}
+
+	/**
+	 * Creates a path and a file system (if required) based on the given URI
+	 * 
+	 * @param uri
+	 *            the uri to create the file system and the path of
+	 * @return the path of the file in the file system
+	 * @throws IOException
+	 *             if the file system could'nt be created
+	 * @throws URISyntaxException
+	 *             if the URI has no valid syntax
+	 */
+	public static Path getPath(URI uri) throws IOException, URISyntaxException
+	{
+		String uriString = uri.toString();
+		int indexOfExclamationMark = uriString.indexOf('!');
+		if (indexOfExclamationMark == -1)
+		{
+			return Paths.get(uri);
+		}
+		String zipFile = uriString.substring(0, indexOfExclamationMark);
+		FileSystem fileSystem = fileSystemURIs.get(uri);
+		if (fileSystem == null)
+		{
+			Map<String, String> env = new HashMap<>();
+			env.put("create", "true");
+			fileSystem = FileSystems.newFileSystem(new URI(zipFile), env);
+			fileSystemURIs.put(uri, fileSystem);
+		}
+		String fileName = uriString.substring(uriString.indexOf('!') + 1);
+		return fileSystem.getPath(fileName);
 	}
 }
