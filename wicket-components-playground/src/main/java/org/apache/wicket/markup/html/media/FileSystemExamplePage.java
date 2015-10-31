@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.media.video.Video;

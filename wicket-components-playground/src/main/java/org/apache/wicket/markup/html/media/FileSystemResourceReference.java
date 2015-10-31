@@ -122,14 +122,17 @@ public class FileSystemResourceReference extends ResourceReference
 	 * Creates a path and a file system (if required) based on the given URI
 	 * 
 	 * @param uri
-	 *            the uri to create the file system and the path of
+	 *            the URI to create the file system and the path of
+	 * @param env
+	 *            the environment parameter to create the file system with
 	 * @return the path of the file in the file system
 	 * @throws IOException
 	 *             if the file system could'nt be created
 	 * @throws URISyntaxException
 	 *             if the URI has no valid syntax
 	 */
-	public static Path getPath(URI uri) throws IOException, URISyntaxException
+	public static Path getPath(URI uri, Map<String, String> env) throws IOException,
+		URISyntaxException
 	{
 		String uriString = uri.toString();
 		int indexOfExclamationMark = uriString.indexOf('!');
@@ -141,12 +144,32 @@ public class FileSystemResourceReference extends ResourceReference
 		FileSystem fileSystem = fileSystemURIs.get(uri);
 		if (fileSystem == null)
 		{
-			Map<String, String> env = new HashMap<>();
-			env.put("create", "true");
+			if (env == null)
+			{
+				env = new HashMap<>();
+				env.put("create", "true");
+				env.put("encoding", "UTF-8");
+			}
 			fileSystem = FileSystems.newFileSystem(new URI(zipFile), env);
 			fileSystemURIs.put(uri, fileSystem);
 		}
 		String fileName = uriString.substring(uriString.indexOf('!') + 1);
 		return fileSystem.getPath(fileName);
+	}
+
+	/**
+	 * Creates a path and a file system (if required) based on the given URI
+	 * 
+	 * @param uri
+	 *            the URI to create the file system and the path of
+	 * @return the path of the file in the file system
+	 * @throws IOException
+	 *             if the file system could'nt be created
+	 * @throws URISyntaxException
+	 *             if the URI has no valid syntax
+	 */
+	public static Path getPath(URI uri) throws IOException, URISyntaxException
+	{
+		return getPath(uri, null);
 	}
 }
