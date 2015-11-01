@@ -39,7 +39,16 @@ import org.apache.wicket.request.resource.ResourceReference;
  * /WEB-INF/classes/META-INF/services folder for webapps<br>
  * <br>
  * You can optionally override {@link #getMimeType()} to provide an inline mime type detection,
- * which is preferred to the default detection.
+ * which is preferred to the default detection.<br>
+ * <br>
+ * Example:
+ * 
+ * <pre>
+ * <code>
+ * Path path = FileSystemResourceReference.getPath(URI.create("jar:file:///folder/file.zip!/folderInZip/video.mp4"));
+ * add(new Video("video", new FileSystemResourceReference(path)));
+ * </code>
+ * </pre>
  * 
  * @author Tobias Soloschenko
  */
@@ -91,10 +100,12 @@ public class FileSystemResourceReference extends ResourceReference
 	 * Used to apply a custom mime type without implementing a mime type detection
 	 * 
 	 * @return the mime type
+	 * @throws IOException
+	 *             if the mime type could'nt be read
 	 */
-	protected String getMimeType()
+	protected String getMimeType() throws IOException
 	{
-		return null;
+		return getFileSystemResource().getMimeType();
 	}
 
 	/**
@@ -104,18 +115,7 @@ public class FileSystemResourceReference extends ResourceReference
 	 */
 	protected FileSystemResource getFileSystemResource()
 	{
-		FileSystemResource fileSystemResource = new FileSystemResource(path)
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected String getMimeType() throws IOException
-			{
-				String mimeType = FileSystemResourceReference.this.getMimeType();
-				return mimeType != null ? mimeType : super.getMimeType();
-			}
-		};
-		return fileSystemResource;
+		return new FileSystemResource(path);
 	}
 
 	/**

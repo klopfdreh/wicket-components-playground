@@ -60,7 +60,6 @@ public class FileSystemResource extends AbstractResource
 	{
 		try
 		{
-			
 			long size = getSize(path);
 			ResourceResponse resourceResponse = new ResourceResponse();
 			resourceResponse.setContentType(getMimeType() != null ? getMimeType()
@@ -84,6 +83,9 @@ public class FileSystemResource extends AbstractResource
 
 	/**
 	 * Adjusts the resource response by overriding it with additional information
+	 * 
+	 * @param resourceResponse
+	 *            the resource response to adjust
 	 * 
 	 * @return the resource response to be adjusted
 	 */
@@ -120,6 +122,9 @@ public class FileSystemResource extends AbstractResource
 
 	/**
 	 * Gets the input stream of the given path
+	 * 
+	 * @param path
+	 *            the path to get the input stream from
 	 * 
 	 * @return the input stream of the given path
 	 * @throws IOException
