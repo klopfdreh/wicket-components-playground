@@ -60,17 +60,16 @@ public class FileSystemResource extends AbstractResource
 	{
 		try
 		{
-			long size = getSize(path);
+			long size = getSize();
 			ResourceResponse resourceResponse = new ResourceResponse();
-			resourceResponse.setContentType(getMimeType() != null ? getMimeType()
-				: Files.probeContentType(path));
+			resourceResponse.setContentType(getMimeType());
 			resourceResponse.setAcceptRange(ContentRangeType.BYTES);
 			resourceResponse.setContentLength(size);
 			resourceResponse = adjustResourceResponse(resourceResponse);
 			RequestCycle cycle = RequestCycle.get();
 			Long startbyte = cycle.getMetaData(CONTENT_RANGE_STARTBYTE);
 			Long endbyte = cycle.getMetaData(CONTENT_RANGE_ENDBYTE);
-			resourceResponse.setWriteCallback(new PartWriterCallback(getInputStream(path), size,
+			resourceResponse.setWriteCallback(new PartWriterCallback(getInputStream(), size,
 				startbyte, endbyte));
 			return resourceResponse;
 		}
@@ -97,13 +96,11 @@ public class FileSystemResource extends AbstractResource
 	/**
 	 * Gets the size of the resource
 	 * 
-	 * @param path
-	 *            the path to get the size of the resource from
 	 * @return the size of the resource
 	 * @throws IOException
 	 *             if the size attribute can't be read
 	 */
-	protected long getSize(Path path) throws IOException
+	protected long getSize() throws IOException
 	{
 		return Files.readAttributes(path, BasicFileAttributes.class).size();
 	}
@@ -123,14 +120,11 @@ public class FileSystemResource extends AbstractResource
 	/**
 	 * Gets the input stream of the given path
 	 * 
-	 * @param path
-	 *            the path to get the input stream from
-	 * 
 	 * @return the input stream of the given path
 	 * @throws IOException
 	 *             if there is an exception while receiving the input stream
 	 */
-	protected InputStream getInputStream(Path path) throws IOException
+	protected InputStream getInputStream() throws IOException
 	{
 		return Files.newInputStream(path);
 	}
