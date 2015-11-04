@@ -26,6 +26,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.lang.Args;
@@ -59,8 +61,11 @@ public class FileSystemResourceReference extends ResourceReference
 
 	private final Path path;
 
-	private static Map<URI, FileSystem> fileSystemURIs = new HashMap<URI, FileSystem>();
-
+	/** The meta data key of the content range end byte **/
+	public static final MetaDataKey<Map<URI,FileSystem>> FILE_SYSTEM_META_DATA_KEY = new MetaDataKey<Map<URI,FileSystem>>()
+	{
+		private static final long serialVersionUID = 1L;
+	};
 	/**
 	 * Creates a file system resource reference based on the given path
 	 * 
@@ -71,20 +76,8 @@ public class FileSystemResourceReference extends ResourceReference
 	 */
 	public FileSystemResourceReference(String name, Path path)
 	{
-		super(Args.notNull(name, "name"));
+		super(name);
 		Args.notNull(path, "path");
-		this.path = path;
-	}
-
-	/**
-	 * Creates a file system resource reference based on the given path
-	 * 
-	 * @param path
-	 *            the path to create the resource reference (the name is used to expose the data)
-	 */
-	public FileSystemResourceReference(Path path)
-	{
-		super(Args.notNull(path, "path").getFileName().toString());
 		this.path = path;
 	}
 
@@ -96,18 +89,6 @@ public class FileSystemResourceReference extends ResourceReference
 	public IResource getResource()
 	{
 		return getFileSystemResource();
-	}
-
-	/**
-	 * Override to apply a custom mime type without implementing a mime type detection
-	 * 
-	 * @return the mime type
-	 * @throws IOException
-	 *             if the mime type could'nt be read
-	 */
-	protected String getMimeType() throws IOException
-	{
-		return getFileSystemResource().getMimeType();
 	}
 
 	/**
@@ -144,9 +125,14 @@ public class FileSystemResourceReference extends ResourceReference
 		}
 		String zipFile = uriString.substring(0, indexOfExclamationMark);
 		FileSystem fileSystem = null;
-		synchronized (fileSystemURIs)
+		
+		Map<URI, FileSystem> metaData = Application.get().getMetaData(FILE_SYSTEM_META_DATA_KEY);
+		synchronized (FILE_SYSTEM_META_DATA_KEY)
 		{
-			fileSystem = fileSystemURIs.get(uri);
+			if(metaData == null){				
+				metaData = new HashMap<URI, FileSystem>();
+				Application.get().setMetaData(FILE_SYSTEM_META_DATA_KEY, metaData);
+			}
 			if (fileSystem == null)
 			{
 				if (env == null)
@@ -156,7 +142,7 @@ public class FileSystemResourceReference extends ResourceReference
 					env.put("encoding", "UTF-8");
 				}
 				fileSystem = FileSystems.newFileSystem(new URI(zipFile), env);
-				fileSystemURIs.put(uri, fileSystem);
+				metaData.put(uri, fileSystem);
 			}
 		}
 		String fileName = uriString.substring(uriString.indexOf('!') + 1);
