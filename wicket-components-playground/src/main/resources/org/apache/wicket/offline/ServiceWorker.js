@@ -19,7 +19,17 @@ var wicketCacheName = '$(cacheName)';
 // register cache
 self.addEventListener('install', function(event) {
 	var offlineCacheEntries = $(offlineCacheEntries);
-	console.log("Adding the following urls to be cached: "+offlineCacheEntries);
+	console.log("Received the following settings to be cached: "+JSON.stringify(offlineCacheEntries)+", entries with cors are going to be translated to a Request object");
+	
+	// Handle cors settings
+	for(i = 0; i < offlineCacheEntries.length; i++) {
+		if(offlineCacheEntries[i].cors) {
+			offlineCacheEntries[i] = new Request(offlineCacheEntries[i].url, { mode : offlineCacheEntries[i].cors } );
+		}else{
+			offlineCacheEntries[i] = offlineCacheEntries[i].url;
+		}
+	}
+	
 	event.waitUntil(caches.open(wicketCacheName).then(function(cache) {
 		return cache.addAll(offlineCacheEntries);
 	}));
@@ -36,7 +46,7 @@ self.addEventListener('fetch', function(event) {
 				return responseValue;
 			}).catch(function(error) {
 				// Handles exceptions that arise from match() or fetch().
-				console.error('  Error in fetch handler:', error);
+				console.error('Error in fetch handler:', error);
 			});
 		})
 	);

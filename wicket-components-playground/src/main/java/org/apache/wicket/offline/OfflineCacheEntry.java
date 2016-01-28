@@ -36,6 +36,49 @@ public class OfflineCacheEntry
 
 	private String suffix;
 
+	private Cors cors;
+	
+	/**
+	 * CORS settings to be applied to the service worker request / against the server or the cache
+	 * 
+	 * @author Tobias Soloschenko
+	 *
+	 */
+	public enum Cors
+	{
+		/**
+		 * request the server with cors option
+		 */
+		CORS("cors"),
+
+		/**
+		 * no cross orign
+		 */
+		NO_CORS("no-cors"),
+
+		/**
+		 * from same origin
+		 */
+		SAME_ORIGIN("same-origin");
+
+		private String realName;
+
+		private Cors(String realName)
+		{
+			this.realName = realName;
+		}
+
+		/**
+		 * Gets the real name for the cors option
+		 * 
+		 * @return the real name
+		 */
+		public String getRealName()
+		{
+			return realName;
+		}
+	}
+
 	/**
 	 * Gets the object to be cached
 	 * 
@@ -141,6 +184,29 @@ public class OfflineCacheEntry
 	public OfflineCacheEntry setSuffix(String suffix)
 	{
 		this.suffix = suffix;
+		return this;
+	}
+
+	/**
+	 * Gets the cors settings of the entity
+	 * 
+	 * @return the cors settings
+	 */
+	public Cors getCors()
+	{
+		return cors;
+	}
+
+	/**
+	 * Sets the cors settings of the entity
+	 * 
+	 * @param cors
+	 *            the cors settings to be used
+	 * @return the current instance of the entry
+	 */
+	public OfflineCacheEntry setCors(Cors cors)
+	{
+		this.cors = cors;
 		return this;
 	}
 }

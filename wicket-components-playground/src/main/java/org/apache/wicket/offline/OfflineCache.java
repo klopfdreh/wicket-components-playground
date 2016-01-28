@@ -64,7 +64,6 @@ import org.apache.wicket.protocol.http.WebApplication;
  * <b>Important:</b> local development can be achieved through HTTP (localhost, 0.0.0.0, 127.0.0.1),
  * with DNS you have to use HTTPS! Service worker only running with HTTPS if not local.<br>
  * <br><br>
- * <b>TODOS:</b> CORS resource serving<br><br>
  * 
  * @author Tobias Soloschenko
  *

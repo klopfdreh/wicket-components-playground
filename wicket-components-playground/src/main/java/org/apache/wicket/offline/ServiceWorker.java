@@ -17,11 +17,13 @@
 package org.apache.wicket.offline;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.json.JSONArray;
+import org.apache.wicket.ajax.json.JSONObject;
+import org.apache.wicket.offline.OfflineCacheEntry.Cors;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebResponse;
@@ -107,12 +109,18 @@ public class ServiceWorker extends JavaScriptResourceReference
 					String script = new String(bytes, "UTF-8");
 					script = script.replace("$(cacheName)", cacheName);
 					JSONArray urlJsonArray = new JSONArray();
-					List<String> urls = new ArrayList<>();
 					for (OfflineCacheEntry offlineCacheEntry : offlineCacheEntries)
 					{
 						Object cacheObject = offlineCacheEntry.getCacheObject();
 						PageParameters pageParameters = offlineCacheEntry.getPageParameters();
 						String suffix = offlineCacheEntry.getSuffix();
+						Cors cors = offlineCacheEntry.getCors();
+
+						if (cacheObject == null)
+						{
+							throw new WicketRuntimeException(
+								"Please provide a cache object to each OfflineCacheEntry.");
+						}
 
 						CharSequence urlFor = null;
 						if (cacheObject instanceof ResourceReference)
@@ -131,7 +139,7 @@ public class ServiceWorker extends JavaScriptResourceReference
 						}
 						else
 						{
-							urlFor = offlineCacheEntry.toString();
+							urlFor = cacheObject.toString();
 						}
 
 						if (urlFor.toString().equals("."))
@@ -143,14 +151,17 @@ public class ServiceWorker extends JavaScriptResourceReference
 							urlFor = urlFor.toString().substring(0 + 1);
 						}
 
-						urls.add(urlFor.toString() + (suffix != null ? suffix : ""));
+						String url = urlFor.toString() + (suffix != null ? suffix : "");
+						JSONObject object = new JSONObject();
+						if (cors != null)
+						{
+							object.put("cors", cors.getRealName());
+						}
+						object.put("url", url);
+						urlJsonArray.put(object);
 					}
-					urlJsonArray.put(urls);
 					String urlJsonArrayAsString = urlJsonArray.toString();
-					int indexOfOpenBracket = urlJsonArrayAsString.indexOf("[");
-					int indexOfLastBracket = urlJsonArrayAsString.lastIndexOf("]");
-					script = script.replace("$(offlineCacheEntries)",
-						urlJsonArrayAsString.substring(indexOfOpenBracket + 1, indexOfLastBracket));
+					script = script.replace("$(offlineCacheEntries)", urlJsonArrayAsString);
 					bytesToReturn = script.getBytes();
 				}
 				catch (UnsupportedEncodingException e)
