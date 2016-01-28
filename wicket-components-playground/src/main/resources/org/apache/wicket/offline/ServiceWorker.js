@@ -41,7 +41,7 @@ self.addEventListener('fetch', function(event) {
 		caches.open(wicketCacheName).then(function(cache) {
 			return cache.match(event.request).then(function(response) {
 				// Handles requests
-				var responseValue = response || fetch(event.request)
+				var responseValue = response || fetch(event.request);
 				console.log('Found response in cache:', responseValue);
 				return responseValue;
 			}).catch(function(error) {
