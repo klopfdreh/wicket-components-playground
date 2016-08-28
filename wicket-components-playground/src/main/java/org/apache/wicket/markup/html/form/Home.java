@@ -76,8 +76,7 @@ public final class Home extends Page {
 
 	    private static final long serialVersionUID = 1L;
 
-	    @Override
-	    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+	    protected void onSubmit(AjaxRequestTarget target) {
 		target.add(label.setDefaultModelObject("The current output value: "
 			+ outputField2.getDefaultModelObject()));
 	    }
